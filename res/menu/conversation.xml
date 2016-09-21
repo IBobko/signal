@@ -4,6 +4,9 @@
     <item android:title="@string/conversation__menu_add_attachment"
           android:id="@+id/menu_add_attachment" />
 
+    <item android:title="@string/conversation__menu_add_attachment2"
+        android:id="@+id/menu_add_attachment2" />
+
     <item android:title="@string/conversation__menu_view_media"
           android:id="@+id/menu_view_media" />
 

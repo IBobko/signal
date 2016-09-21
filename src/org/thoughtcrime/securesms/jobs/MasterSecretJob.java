@@ -15,7 +15,7 @@ public abstract class MasterSecretJob extends ContextJob {
   @Override
   public void onRun() throws Exception {
     MasterSecret masterSecret = getMasterSecret();
-    onRun(masterSecret);
+    //onRun(masterSecret);
   }
 
   @Override

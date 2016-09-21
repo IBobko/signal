@@ -112,7 +112,7 @@
     <string name="ConversationActivity_reset">Reset</string>
     <string name="ConversationActivity_delete_thread_question">Delete conversation?</string>
     <string name="ConversationActivity_this_will_permanently_delete_all_messages_in_this_conversation">This will permanently delete all messages in this conversation.</string>
-    <string name="ConversationActivity_add_attachment">Add attachment</string>
+    <string name="ConversationActivity_add_attachment">Add attachment hey hey</string>
     <string name="ConversationActivity_select_contact_info">Select contact info</string>
     <string name="ConversationActivity_compose_message">Compose message</string>
     <string name="ConversationActivity_sorry_there_was_an_error_setting_your_attachment">Sorry, there was an error setting your attachment.</string>
@@ -1174,6 +1174,8 @@
 
     <!-- conversation -->
     <string name="conversation__menu_add_attachment">Add attachment</string>
+    <string name="conversation__menu_add_attachment2">Позднее сообщение</string>
+
     <string name="conversation__menu_update_group">Update group</string>
     <string name="conversation__menu_leave_group">Leave group</string>
     <string name="conversation__menu_delete_thread">Delete conversation</string>

@@ -157,6 +157,15 @@
                      android:contentDescription="@string/ConversationActivity_add_attachment"
                      android:nextFocusLeft="@+id/embedded_text_editor" />
 
+        <ImageButton android:id="@+id/attach_button2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:background="@drawable/circle_touch_highlight_background"
+            android:src="@drawable/ic_attach_white_24dp"
+            android:contentDescription="@string/ConversationActivity_add_attachment"
+            android:nextFocusLeft="@+id/embedded_text_editor" />
+
         <org.thoughtcrime.securesms.components.SendButton
                 android:id="@+id/send_button"
                 android:layout_width="match_parent"
