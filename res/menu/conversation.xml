@@ -1,19 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:title="@string/conversation__menu_add_attachment"
-          android:id="@+id/menu_add_attachment" />
+    <item
+        android:id="@+id/menu_add_attachment"
+        android:title="@string/conversation__menu_add_attachment" />
 
-    <item android:title="@string/conversation__menu_add_attachment2"
-        android:id="@+id/menu_add_attachment2" />
+    <item
+        android:id="@+id/menu_add_attachment2"
+        android:title="@string/conversation__menu_add_attachment2" />
 
-    <item android:title="Add delayed message"
-        android:id="@+id/menu_create_delayed_message" />
+    <item
+        android:id="@+id/menu_view_media"
+        android:title="@string/conversation__menu_view_media" />
 
-    <item android:title="@string/conversation__menu_view_media"
-          android:id="@+id/menu_view_media" />
-
-    <item android:title="@string/conversation__menu_conversation_settings"
-          android:id="@+id/menu_conversation_settings"/>
+    <item
+        android:id="@+id/menu_conversation_settings"
+        android:title="@string/conversation__menu_conversation_settings" />
 
 </menu>
