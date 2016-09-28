@@ -2,11 +2,18 @@ package ru.innopolis.messagino;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.v4.widget.SimpleCursorAdapter;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.SimpleAdapter;
 
 import org.thoughtcrime.securesms.R;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashMap;
 
 import static java.security.AccessController.getContext;
 
@@ -27,8 +34,42 @@ public class ChatsDelayedMessagesList extends Activity {
 
         ListView listView = (ListView)findViewById(R.id.delayedMessagesList);
 
-        ArrayAdapter adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, delayedMessages);
+        ArrayList<HashMap<String, String>> myArrList = new ArrayList<HashMap<String, String>>();
+        HashMap<String, String> map;
+
+// First delayed message
+        map = new HashMap<String, String>();
+        map.put("DateTime", "29/09/2016 18:00");
+        map.put("Message", "Please don't forgot  give me money");
+        myArrList.add(map);
+
+// Second delayed message
+        map = new HashMap<String, String>();
+        map.put("DateTime", "01/10/2016 09:00");
+        map.put("Message", "C днем пожилых людей");
+        myArrList.add(map);
+
+// Third delayed message
+        map = new HashMap<String, String>();
+        map.put("DateTime", "4/10/2016 09:00");
+        map.put("Message", "С днем космических войск");
+        myArrList.add(map);
+
+// Fourd delayed message
+        map = new HashMap<String, String>();
+        map.put("DateTime", "5/10/2016 09:00");
+        map.put("Message", "Всех TA  с днем учителя :)");
+        myArrList.add(map);
+
+
+        SimpleAdapter adapter = new SimpleAdapter(this, myArrList, android.R.layout.simple_list_item_2,
+                new String[] {"DateTime", "Message"},
+                new int[] {android.R.id.text1, android.R.id.text2});
         listView.setAdapter(adapter);
+
+        //ArrayAdapter adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_2, delayedMessages);
+        //listView.setAdapter(adapter);
+
     }
 
     @Override
