@@ -2,20 +2,13 @@ package ru.innopolis.messagino;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.v4.widget.SimpleCursorAdapter;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
-
 import org.thoughtcrime.securesms.R;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
-
-import static java.security.AccessController.getContext;
 
 /**
  * Created by i.minnakhmetov on 9/28/2016.
@@ -62,6 +55,9 @@ public class ChatsDelayedMessagesList extends Activity {
         myArrList.add(map);
 
 
+        View header = getLayoutInflater().inflate(R.layout.header, null);
+                listView.addHeaderView(header);
+
         SimpleAdapter adapter = new SimpleAdapter(this, myArrList, android.R.layout.simple_list_item_2,
                 new String[] {"DateTime", "Message"},
                 new int[] {android.R.id.text1, android.R.id.text2});
@@ -76,4 +72,7 @@ public class ChatsDelayedMessagesList extends Activity {
     public void setContentView(View view) {
         super.setContentView(view);
     }
+
+
+
 }
