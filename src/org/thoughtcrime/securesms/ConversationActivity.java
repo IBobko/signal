@@ -138,7 +138,7 @@ import org.thoughtcrime.securesms.util.concurrent.ListenableFuture;
 import org.thoughtcrime.securesms.util.concurrent.SettableFuture;
 import org.whispersystems.libsignal.InvalidMessageException;
 import org.whispersystems.libsignal.util.guava.Optional;
-
+import ru.innopolis.messagino.DelayedMessageActivity;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -453,6 +453,7 @@ public class ConversationActivity extends PassphraseRequiredActionBarActivity
     case R.id.menu_call_insecure:             handleDial(getRecipients().getPrimaryRecipient()); return true;
     case R.id.menu_add_attachment:            handleAddAttachment();                             return true;
     case R.id.menu_view_media:                handleViewMedia();                                 return true;
+      case R.id.menu_create_delayed_message:                handleCreateDelayedMessage();                                 return true;
     case R.id.menu_add_to_contacts:           handleAddToContacts();                             return true;
     case R.id.menu_reset_secure_session:      handleResetSecureSession();                        return true;
     case R.id.menu_group_recipients:          handleDisplayGroupRecipients();                    return true;
@@ -705,6 +706,10 @@ public class ConversationActivity extends PassphraseRequiredActionBarActivity
         }
       }.execute();
     }
+  }
+  private void handleCreateDelayedMessage() {
+    Intent intent = new Intent(this, DelayedMessageActivity.class);
+    startActivity(intent);
   }
 
   private void handleDial(final Recipient recipient) {

@@ -166,7 +166,7 @@ android {
     }
 
     defaultConfig {
-        minSdkVersion 9
+        minSdkVersion 21
         targetSdkVersion 22
 
         buildConfigField "long", "BUILD_TIMESTAMP", getLastCommitTimestamp() + "L"
