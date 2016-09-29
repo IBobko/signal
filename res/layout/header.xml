@@ -38,7 +38,7 @@
         android:layout_width="54dp"
         android:layout_height="59dp"
         android:text="+"
-        android:id="@+id/mytextview2"
+        android:id="@+id/addButton"
         android:padding="0dp"
         android:paddingBottom="0dp"
         android:paddingEnd="0dp"
@@ -51,5 +51,7 @@
         android:layout_alignBottom="@+id/mytextview1"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:layout_weight="0.13" />
+        android:layout_weight="0.13"
+        android:onClick="butAdd_Click"
+        />
 </LinearLayout>

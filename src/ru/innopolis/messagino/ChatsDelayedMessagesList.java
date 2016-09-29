@@ -1,8 +1,10 @@
 package ru.innopolis.messagino;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import org.thoughtcrime.securesms.R;
@@ -16,6 +18,7 @@ import java.util.HashMap;
 
 public class ChatsDelayedMessagesList extends Activity {
     String[] delayedMessages = new String[]{" 1", "2", "3", "4"};
+    private Button addButton;
     public ChatsDelayedMessagesList() {
         super();
     }
@@ -26,6 +29,7 @@ public class ChatsDelayedMessagesList extends Activity {
         setContentView(R.layout.delay_messages_list);
 
         ListView listView = (ListView)findViewById(R.id.delayedMessagesList);
+        addButton = (Button)findViewById(R.id.addButton);
 
         ArrayList<HashMap<String, String>> myArrList = new ArrayList<HashMap<String, String>>();
         HashMap<String, String> map;
@@ -73,6 +77,10 @@ public class ChatsDelayedMessagesList extends Activity {
         super.setContentView(view);
     }
 
+    public void butAdd_Click(View v){
+        Intent intent = new Intent(this, DelayedMessageActivity.class);
+        startActivity(intent);
+    }
 
 
 }
