@@ -9,8 +9,8 @@
         android:id="@+id/menu_context_delete_message"
         android:icon="?menu_trash_icon"
         app:showAsAction="always"
-        android:enabled="false"
-        android:visible="false" />
+        android:visible="false"
+        android:enabled="false" />
 
     <item android:title="@string/conversation_context__menu_copy_text"
           android:id="@+id/menu_context_copy"

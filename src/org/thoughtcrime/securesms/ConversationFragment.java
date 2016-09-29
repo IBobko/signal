@@ -270,49 +270,6 @@ public class ConversationFragment extends Fragment
         clipboard.setText(result);
   }
 
-  private void handleDeleteMessages(final Set<MessageRecord> messageRecords) {
-    int                 messagesCount = messageRecords.size();
-    AlertDialog.Builder builder       = new AlertDialog.Builder(getActivity());
-
-    builder.setIconAttribute(R.attr.dialog_alert_icon);
-    builder.setTitle(getActivity().getResources().getQuantityString(R.plurals.ConversationFragment_delete_selected_messages, messagesCount, messagesCount));
-    builder.setMessage(getActivity().getResources().getQuantityString(R.plurals.ConversationFragment_this_will_permanently_delete_all_n_selected_messages, messagesCount, messagesCount));
-    builder.setCancelable(true);
-
-    builder.setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
-      @Override
-      public void onClick(DialogInterface dialog, int which) {
-        new ProgressDialogAsyncTask<MessageRecord, Void, Void>(getActivity(),
-                                                               R.string.ConversationFragment_deleting,
-                                                               R.string.ConversationFragment_deleting_messages)
-        {
-          @Override
-          protected Void doInBackground(MessageRecord... messageRecords) {
-            for (MessageRecord messageRecord : messageRecords) {
-              boolean threadDeleted;
-
-              if (messageRecord.isMms()) {
-                threadDeleted = DatabaseFactory.getMmsDatabase(getActivity()).delete(messageRecord.getId());
-              } else {
-                threadDeleted = DatabaseFactory.getSmsDatabase(getActivity()).deleteMessage(messageRecord.getId());
-              }
-
-              if (threadDeleted) {
-                threadId = -1;
-                listener.setThreadId(threadId);
-              }
-            }
-
-            return null;
-          }
-        }.execute(messageRecords.toArray(new MessageRecord[messageRecords.size()]));
-      }
-    });
-
-    builder.setNegativeButton(android.R.string.cancel, null);
-    builder.show();
-  }
-
   private void handleDisplayDetails(MessageRecord message) {
     Intent intent = new Intent(getActivity(), MessageDetailsActivity.class);
     intent.putExtra(MessageDetailsActivity.MASTER_SECRET_EXTRA, masterSecret);
@@ -459,10 +416,6 @@ public class ConversationFragment extends Fragment
       switch(item.getItemId()) {
         case R.id.menu_context_copy:
           handleCopyMessage(getListAdapter().getSelectedItems());
-          actionMode.finish();
-          return true;
-        case R.id.menu_context_delete_message:
-          handleDeleteMessages(getListAdapter().getSelectedItems());
           actionMode.finish();
           return true;
         case R.id.menu_context_details:
