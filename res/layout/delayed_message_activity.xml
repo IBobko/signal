@@ -30,22 +30,26 @@
         android:layout_width="match_parent"
         android:layout_height="40sp">
         <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="start|center_vertical"
+            android:text="Date: "
+            android:textSize="22sp">
+        </TextView>
+        <TextView
                 android:id="@+id/textDate"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="start|center_vertical"
-                android:text="Date:"
                 android:textSize="22sp"
             android:layout_weight="1">
             </TextView>
-
         <Button
             android:text="..."
-            android:layout_width="wrap_content"
+            android:layout_width="40sp"
             android:layout_height="match_parent"
             android:gravity="start|center_vertical"
-            android:id="@+id/btnDate"
-            android:layout_weight="1" />
+            android:id="@+id/btnDate" />
     </LinearLayout>
     <LinearLayout android:layout_height="1dp"
         android:layout_width="match_parent"
@@ -55,12 +59,17 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="40sp">
-
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="Time:"
+            android:gravity="start|center_vertical"
+            android:textSize="22sp">
+        </TextView>
         <TextView
                 android:id="@+id/textTime"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="Time:"
             android:gravity="start|center_vertical"
                 android:textSize="22sp"
             android:layout_weight="1">
@@ -68,10 +77,9 @@
 
         <Button
             android:text="..."
-            android:layout_width="wrap_content"
+            android:layout_width="40sp"
             android:layout_height="match_parent"
-            android:id="@+id/btnTime"
-            android:layout_weight="1" />
+            android:id="@+id/btnTime"/>
     </LinearLayout>
     <LinearLayout android:layout_height="1dp"
         android:layout_width="match_parent"

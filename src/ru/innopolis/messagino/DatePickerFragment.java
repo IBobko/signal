@@ -17,28 +17,24 @@ import java.util.Calendar;
  *
  * @author Vyacheslav Stepanov
  */
-public class DatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
-
+public class DatePickerFragment extends DialogFragment  {
+    int i;
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         // Use the current time as the default values for the picker
-        final Calendar c = Calendar.getInstance();
-        int year = c.get(Calendar.YEAR);
-        int month = c.get(Calendar.MONTH);
-        int day = c.get(Calendar.DAY_OF_MONTH);
 
+        int year=0;
+        int month=0;
+        int day=0;
+
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            year = bundle.getInt("YEAR",0);
+            month = bundle.getInt("MONTH",0);
+            day = bundle.getInt("DAY",0);
+        }
         // Create a new instance of DatePickerDialog and return it
-        return new DatePickerDialog(getActivity(), this, year, month, day);
-    }
-
-    @Override
-    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-        /*Bundle bnd = new Bundle();
-        bnd.putInt("Year", year);
-        bnd.putInt("Month", monthOfYear);
-        bnd.putInt("Day", dayOfMonth);
-        this.setArguments(bnd);*/
-
+        return new DatePickerDialog(getActivity(), (DelayedMessageActivity)getActivity(), year, month, day);
     }
 }
 
