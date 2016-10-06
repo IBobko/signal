@@ -1,24 +1,26 @@
 package ru.innopolis.messagino;
 
-
 import android.app.Activity;
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
+import android.content.ContentValues;
+import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.DialogFragment;
-import android.app.TimePickerDialog;
+import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.TimePicker;
 
 import org.thoughtcrime.securesms.R;
+import org.thoughtcrime.securesms.database.DatabaseFactory;
+import org.thoughtcrime.securesms.database.DelayedMessageDatabase;
 
 import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.GregorianCalendar;
 
 
 /**
@@ -27,17 +29,48 @@ import java.util.GregorianCalendar;
  * @author Vyacheslav Stepanov
  */
 public class DelayedMessageActivity extends Activity implements OnClickListener {
-    int myYear = 2011;
-    int myMonth = 02;
-    int myDay = 03;
+    final DelayedMessageData delayedMessageData = new DelayedMessageData();
+    private TextView dateText;
+    private TextView timeText;
+    private EditText textMessage;
 
-    int myHour = 4;
-    int myMinute = 30;
+    @Override
+    protected void onResume() {
+        super.onResume();
+        final Intent intent = getIntent();
+        if (intent.getExtras() != null) {
+            Bundle ex = intent.getExtras();
+            try {
+                delayedMessageData.setId(Integer.parseInt(ex.getString("MESSAGE_ID")));
+            } catch(NumberFormatException ignore) {}
 
-    TextView dateText;
-    TextView timeText;
-    Button btnTime;
-    Button btnDate;
+
+            String text = intent.getExtras().getString("MESSAGE_TEXT");
+
+            if (text!=null) {
+                textMessage.setText(text);
+            } else {
+                textMessage.setText("");
+            }
+
+            final String dateTime = intent.getExtras().getString("MESSAGE_TIME");
+            if (dateTime!=null) {
+                dateText.setText(DateFormat.getDateInstance().format(dateTime));
+                timeText.setText(DateFormat.getTimeInstance().format(dateTime));
+            } else {
+                final Calendar cal = Calendar.getInstance();
+                dateText.setText(DateFormat.getDateInstance().format(cal.getTime()));
+                timeText.setText(DateFormat.getTimeInstance().format(cal.getTime()));
+            }
+
+        } else {
+            final Calendar cal = Calendar.getInstance();
+            dateText.setText(DateFormat.getDateInstance().format(cal.getTime()));
+            timeText.setText(DateFormat.getTimeInstance().format(cal.getTime()));
+            textMessage.setText("");
+            delayedMessageData.setDateForSending(cal);
+        }
+    }
 
     /**
      * Called when the activity is first created.
@@ -47,24 +80,19 @@ public class DelayedMessageActivity extends Activity implements OnClickListener 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.delayed_message_activity);
 
-        btnTime = (Button) findViewById(R.id.btnTime);
+        Button btnTime = (Button) findViewById(R.id.btnTime);
         btnTime.setOnClickListener(this);
 
-        btnDate = (Button) findViewById(R.id.btnDate);
+        Button btnDate = (Button) findViewById(R.id.btnDate);
         btnDate.setOnClickListener(this);
+
+        Button btnSend = (Button) findViewById(R.id.btnSend);
+
+        btnSend.setOnClickListener(this);
 
         timeText = (TextView) findViewById(R.id.textTime);
         dateText = (TextView) findViewById(R.id.textDate);
-        updateTextView();
-
-
-    }
-    public void updateTextView(){
-        Calendar cal = new GregorianCalendar(myYear, myMonth, myDay);
-
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-        dateText.setText(df.format(cal.getTime()));
-        timeText.setText("Time "+Integer.toString(myHour)+":"+Integer.toString(myMinute));
+        textMessage = (EditText) findViewById(R.id.textMessage);
     }
 
     @Override
@@ -76,38 +104,59 @@ public class DelayedMessageActivity extends Activity implements OnClickListener 
             case R.id.btnDate:
                 showDatePickerDialog(v);
                 break;
+            case R.id.btnSend:
+                save(v);
+                break;
             default:
                 break;
         }
     }
 
-    public void showTimePickerDialog(View v) {
+    private void save(View v) {
+        final DelayedMessageDatabase delayedMessage = DatabaseFactory.getDelayedMessageDatabase(DelayedMessageActivity.this);
 
-        TimePickerFragment newFragment = new TimePickerFragment();
-//        Bundle bnd = new Bundle();
-//        bnd.putInt("Hour", myHour);
-//        bnd.putInt("Minute", myMinute);
-//        newFragment.setArguments(bnd);
-        newFragment.setHour(myHour);
-        newFragment.setMinute(myMinute);
-        //newFragment.setTargetFragment(this.getContext(), 1);
-        newFragment.show(getFragmentManager(), "timePicker");
+        final ContentValues contentValues = new ContentValues();
+        contentValues.put("message",textMessage.getText().toString());
 
-        myMinute = newFragment.getMinute();
-        myHour = newFragment. getHour();
-        //Bundle bundle= newFragment.getArguments();
-       // myHour=bundle.getInt("Hour");
-       // myMinute=bundle.getInt("Minute");
-        updateTextView();
+        final SQLiteDatabase db = delayedMessage.getDb();
+
+        if (delayedMessageData.getId()!=null && delayedMessageData.getId()!=0) {
+            db.update("delayed_message", contentValues, "_id = " + delayedMessageData.getId(), null);
+        } else {
+            db.insert("delayed_message", null,  contentValues);
+        }
+
+        finish();
+
     }
-    public void showDatePickerDialog(View v) {
-        DatePickerFragment newFragment = new DatePickerFragment();
-        newFragment.show(getFragmentManager(), "datePicker");
-        //Bundle bundle= newFragment.getArguments();
-        //myYear=bundle.getInt("Year");
-        //myMonth=bundle.getInt("Month");
-       // myDay=bundle.getInt("Day");
-        //updateTextView();
+
+    public void showTimePickerDialog(View v) {
+        int hour = delayedMessageData.getDateForSending().get(Calendar.HOUR);
+        int minute = delayedMessageData.getDateForSending().get(Calendar.MINUTE);
+        final TimePickerDialog timePickerDialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(final TimePicker view, final int hourOfDay, final int minute) {
+                delayedMessageData.getDateForSending().set(Calendar.HOUR, hourOfDay);
+                delayedMessageData.getDateForSending().set(Calendar.MINUTE, minute);
+                timeText.setText(DateFormat.getTimeInstance().format(delayedMessageData.getDateForSending().getTime()));
+            }
+        }, hour, minute, android.text.format.DateFormat.is24HourFormat(this));
+        timePickerDialog.show();
+    }
+
+    public void showDatePickerDialog(final View v) {
+        int year = delayedMessageData.getDateForSending().get(Calendar.YEAR);
+        int month = delayedMessageData.getDateForSending().get(Calendar.MONTH);
+        int day = delayedMessageData.getDateForSending().get(Calendar.DAY_OF_MONTH);
+        final DatePickerDialog datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                delayedMessageData.getDateForSending().set(Calendar.YEAR, year);
+                delayedMessageData.getDateForSending().set(Calendar.MONTH, monthOfYear);
+                delayedMessageData.getDateForSending().set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                dateText.setText(DateFormat.getDateInstance().format(delayedMessageData.getDateForSending().getTime()));
+            }
+        }, year, month, day);
+        datePickerDialog.show();
     }
 }
-

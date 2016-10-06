@@ -73,7 +73,8 @@ public class DatabaseFactory {
   private static final int MIGRATED_CONVERSATION_LIST_STATUS_VERSION       = 26;
   private static final int INTRODUCED_SUBSCRIPTION_ID_VERSION              = 27;
   private static final int INTRODUCED_EXPIRE_MESSAGES_VERSION              = 28;
-  private static final int DATABASE_VERSION                                = 28;
+  private static final int INTRODUCED_DELAYED_MESSAGES_VERSION             = 29;
+  private static final int DATABASE_VERSION                                = 29;
 
   private static final String DATABASE_NAME    = "messages.db";
   private static final Object lock             = new Object();
@@ -93,6 +94,7 @@ public class DatabaseFactory {
   private final MmsSmsDatabase mmsSmsDatabase;
   private final IdentityDatabase identityDatabase;
   private final DraftDatabase draftDatabase;
+  private final DelayedMessageDatabase delayedMessageDatabase;
   private final PushDatabase pushDatabase;
   private final GroupDatabase groupDatabase;
   private final RecipientPreferenceDatabase recipientPreferenceDatabase;
@@ -180,6 +182,7 @@ public class DatabaseFactory {
     this.mmsSmsDatabase              = new MmsSmsDatabase(context, databaseHelper);
     this.identityDatabase            = new IdentityDatabase(context, databaseHelper);
     this.draftDatabase               = new DraftDatabase(context, databaseHelper);
+    this.delayedMessageDatabase      = new DelayedMessageDatabase(context,databaseHelper);
     this.pushDatabase                = new PushDatabase(context, databaseHelper);
     this.groupDatabase               = new GroupDatabase(context, databaseHelper);
     this.recipientPreferenceDatabase = new RecipientPreferenceDatabase(context, databaseHelper);
@@ -196,6 +199,7 @@ public class DatabaseFactory {
     this.attachments.reset(databaseHelper);
     this.thread.reset(databaseHelper);
     this.mmsAddress.reset(databaseHelper);
+    this.delayedMessageDatabase.reset(databaseHelper);
     this.mmsSmsDatabase.reset(databaseHelper);
     this.identityDatabase.reset(databaseHelper);
     this.draftDatabase.reset(databaseHelper);
@@ -495,6 +499,10 @@ public class DatabaseFactory {
     MessageNotifier.updateNotification(context, masterSecret);
   }
 
+  public static DelayedMessageDatabase getDelayedMessageDatabase(final Context context) {
+    return getInstance(context).delayedMessageDatabase;
+  }
+
   private static class DatabaseHelper extends SQLiteOpenHelper {
 
     public DatabaseHelper(Context context, String name, CursorFactory factory, int version) {
@@ -514,6 +522,7 @@ public class DatabaseFactory {
       db.execSQL(GroupDatabase.CREATE_TABLE);
       db.execSQL(RecipientPreferenceDatabase.CREATE_TABLE);
 
+
       executeStatements(db, SmsDatabase.CREATE_INDEXS);
       executeStatements(db, MmsDatabase.CREATE_INDEXS);
       executeStatements(db, AttachmentDatabase.CREATE_INDEXS);
@@ -526,6 +535,10 @@ public class DatabaseFactory {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
       db.beginTransaction();
+
+      if (oldVersion < INTRODUCED_DELAYED_MESSAGES_VERSION) {
+        db.execSQL(DelayedMessageDatabase.CREATE_TABLE);
+      }
 
       if (oldVersion < INTRODUCED_IDENTITIES_VERSION) {
         db.execSQL("CREATE TABLE identities (_id INTEGER PRIMARY KEY, key TEXT UNIQUE, name TEXT UNIQUE, mac TEXT);");

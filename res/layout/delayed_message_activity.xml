@@ -60,7 +60,6 @@
                 android:id="@+id/textTime"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="Time:"
             android:gravity="start|center_vertical"
                 android:textSize="22sp"
             android:layout_weight="1">
