@@ -48,6 +48,8 @@ public class delayed_message_list extends BaseActionBarActivity {
         }
     });
 
+
+
     public boolean onTouchEvent(MotionEvent event) {
         return gestureDetector.onTouchEvent(event);
     };
@@ -110,17 +112,6 @@ public class delayed_message_list extends BaseActionBarActivity {
                 new int[] {android.R.id.text1, android.R.id.text2});
         listView.setAdapter(adapter);
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Map row = (Map)listView.getAdapter().getItem(position);
-                Intent myIntent = new Intent(delayed_message_list.this, DelayedMessageActivity.class);
-                myIntent.putExtra("MESSAGE_ID", (String)row.get("ID")); //Optional parameters
-                myIntent.putExtra("MESSAGE_TEXT", (String)row.get("Message")); //Optional parameters
-                delayed_message_list.this.startActivity(myIntent);
-
-            }
-        });
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
@@ -138,6 +129,19 @@ public class delayed_message_list extends BaseActionBarActivity {
                 return true;
             }
         });
+
+        //266013 Send to Edit message preview
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Map row = (Map)listView.getAdapter().getItem(position);
+                Intent myIntent = new Intent(delayed_message_list.this, DelayedMessageActivity.class);
+                myIntent.putExtra("MESSAGE_ID", (String)row.get("ID")); //Optional parameters
+                myIntent.putExtra("MESSAGE_TEXT", (String)row.get("Message")); //Optional parameters
+                delayed_message_list.this.startActivity(myIntent);
+
+            }
+        })
     }
 
     public void butAdd_Click(View v){
