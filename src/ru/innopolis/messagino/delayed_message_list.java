@@ -1,14 +1,21 @@
 package ru.innopolis.messagino;
 
-import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.app.Activity;
+import android.view.GestureDetector;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+
+import org.thoughtcrime.securesms.BaseActionBarActivity;
 import org.thoughtcrime.securesms.R;
 import org.thoughtcrime.securesms.database.DatabaseFactory;
 import org.thoughtcrime.securesms.database.DelayedMessageDatabase;
@@ -17,15 +24,38 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by i.minnakhmetov on 9/28/2016.
- */
+public class delayed_message_list extends BaseActionBarActivity {
+    private Menu menu;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_delayed_message_list);
+        delayed_message_list.this.setTitle("Запланированные сообщения");
+        //ChatsDelayedMessagesListActivity
+    }
 
-public class ChatsDelayedMessagesList extends Activity {
 
-    private Button addButton;
-    public ChatsDelayedMessagesList() {
-        super();
+
+    final GestureDetector gestureDetector = new GestureDetector(new GestureDetector.SimpleOnGestureListener() {
+        public void onLongPress(MotionEvent e) {
+            AlertDialog.Builder dlgAlert  = new AlertDialog.Builder(delayed_message_list.this);
+            dlgAlert.setPositiveButton("Ok",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            //dismiss the dialog
+                        }
+                    });
+        }
+    });
+
+    public boolean onTouchEvent(MotionEvent event) {
+        return gestureDetector.onTouchEvent(event);
+    };
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        getMenuInflater().inflate(R.menu.menu_chats_delayed_messages_list, menu);
+        return true;
     }
 
     @Override
@@ -35,7 +65,8 @@ public class ChatsDelayedMessagesList extends Activity {
         setContentView(R.layout.activity_delayed_messages_list);
 
         final ListView listView = (ListView)findViewById(R.id.delayedMessagesList);
-        addButton = (Button)findViewById(R.id.addButton);
+
+        //addButton = (Button)findViewById(R.id.addButton);
 
         ArrayList<HashMap<String, String>> myArrList = new ArrayList<HashMap<String, String>>();
         HashMap<String, String> map;
@@ -64,8 +95,7 @@ public class ChatsDelayedMessagesList extends Activity {
         map.put("Message", "Всех TA  с днем учителя :)");
         myArrList.add(map);
 
-
-        DelayedMessageDatabase delayedMessage = DatabaseFactory.getDelayedMessageDatabase(ChatsDelayedMessagesList.this);
+        DelayedMessageDatabase delayedMessage = DatabaseFactory.getDelayedMessageDatabase(delayed_message_list.this);
 
         for (final DelayedMessageData delayedMessageData: delayedMessage.getMessages()) {
             map = new HashMap<>();
@@ -74,10 +104,6 @@ public class ChatsDelayedMessagesList extends Activity {
             map.put("ID", delayedMessageData.getId().toString());
             myArrList.add(map);
         }
-
-
-        View header = getLayoutInflater().inflate(R.layout.header, null);
-        listView.addHeaderView(header);
 
         SimpleAdapter adapter = new SimpleAdapter(this, myArrList, android.R.layout.simple_list_item_2,
                 new String[] {"DateTime", "Message"},
@@ -88,23 +114,30 @@ public class ChatsDelayedMessagesList extends Activity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Map row = (Map)listView.getAdapter().getItem(position);
-                Intent myIntent = new Intent(ChatsDelayedMessagesList.this, DelayedMessageActivity.class);
+                Intent myIntent = new Intent(delayed_message_list.this, DelayedMessageActivity.class);
                 myIntent.putExtra("MESSAGE_ID", (String)row.get("ID")); //Optional parameters
                 myIntent.putExtra("MESSAGE_TEXT", (String)row.get("Message")); //Optional parameters
-                ChatsDelayedMessagesList.this.startActivity(myIntent);
+                delayed_message_list.this.startActivity(myIntent);
 
             }
         });
-    }
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
+                                           int pos, long id) {
+                // TODO Auto-generated method stub
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
+                AlertDialog.Builder dlgAlert  = new AlertDialog.Builder(delayed_message_list.this);
+                dlgAlert.setPositiveButton("Ok",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                //dismiss the dialog
+                            }
+                        });
 
-    @Override
-    public void setContentView(View view) {
-        super.setContentView(view);
+                return true;
+            }
+        });
     }
 
     public void butAdd_Click(View v){
