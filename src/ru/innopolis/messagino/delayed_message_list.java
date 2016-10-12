@@ -104,7 +104,6 @@ public class delayed_message_list extends BaseActionBarActivity {
                 }
                 item.setVisible(true);
                 item.setShowAsAction(2); //show always
-                System.out.println("Ildar molodec a Kamil piderast");
                 return true;
             }
         });
