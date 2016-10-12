@@ -34,8 +34,6 @@ public class delayed_message_list extends BaseActionBarActivity {
         //ChatsDelayedMessagesListActivity
     }
 
-
-
     final GestureDetector gestureDetector = new GestureDetector(new GestureDetector.SimpleOnGestureListener() {
         public void onLongPress(MotionEvent e) {
             AlertDialog.Builder dlgAlert  = new AlertDialog.Builder(delayed_message_list.this);
@@ -47,8 +45,6 @@ public class delayed_message_list extends BaseActionBarActivity {
                     });
         }
     });
-
-
 
     public boolean onTouchEvent(MotionEvent event) {
         return gestureDetector.onTouchEvent(event);
@@ -125,7 +121,6 @@ public class delayed_message_list extends BaseActionBarActivity {
                                 //dismiss the dialog
                             }
                         });
-
                 return true;
             }
         });
@@ -141,7 +136,7 @@ public class delayed_message_list extends BaseActionBarActivity {
                 delayed_message_list.this.startActivity(myIntent);
 
             }
-        })
+        });
     }
 
     public void butAdd_Click(View v){
