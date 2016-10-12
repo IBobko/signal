@@ -2,6 +2,7 @@ package ru.innopolis.messagino;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,6 +21,9 @@ import java.util.Map;
 
 public class delayed_message_list extends BaseActionBarActivity {
     private Menu menu;
+    private SimpleAdapter adapter;
+    private ListView listView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,9 +47,9 @@ public class delayed_message_list extends BaseActionBarActivity {
 
         setContentView(R.layout.activity_delayed_messages_list);
 
-        final ListView listView = (ListView) findViewById(R.id.delayedMessagesList);
+        listView = (ListView) findViewById(R.id.delayedMessagesList);
         listView.setLongClickable(true);
-        //addButton = (Button)findViewById(R.id.addButton);
+        listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 
         ArrayList<HashMap<String, String>> myArrList = new ArrayList<HashMap<String, String>>();
         HashMap<String, String> map;
@@ -84,11 +88,10 @@ public class delayed_message_list extends BaseActionBarActivity {
             myArrList.add(map);
         }
 
-        SimpleAdapter adapter = new SimpleAdapter(this, myArrList, android.R.layout.simple_list_item_2,
+        adapter = new SimpleAdapter(this, myArrList, android.R.layout.simple_list_item_2,
                 new String[]{"DateTime", "Message"},
                 new int[]{android.R.id.text1, android.R.id.text2});
         listView.setAdapter(adapter);
-
 
 
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
@@ -96,14 +99,12 @@ public class delayed_message_list extends BaseActionBarActivity {
             public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
                                            int pos, long id) {
                 // TODO Auto-generated method stub
-                //MenuItem item = (MenuItem) menu.findItem(R.id.deleteItem);
-                //menu.setGroupVisible(R.id.deleteItem, true);
-                MenuItem item = null;
-                if (menu != null){
-                    item = (MenuItem) menu.findItem(R.id.deleteItem);
-                }
+                MenuItem item = (MenuItem) menu.findItem(R.id.deleteItem);
                 item.setVisible(true);
                 item.setShowAsAction(2); //show always
+                listView.setItemChecked(pos, true);
+                arg1.setSelected(true);
+                System.out.println("Set selected item");
                 return true;
             }
         });
@@ -120,5 +121,7 @@ public class delayed_message_list extends BaseActionBarActivity {
             }
         });
     }
+
+
 
 }

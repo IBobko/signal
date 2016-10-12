@@ -564,7 +564,7 @@
         <activity
             android:name="ru.innopolis.messagino.delayed_message_list"
             android:label="@string/title_activity_delayed_message_list"
-            android:theme="@style/NoAnimation.Theme.AppCompat.Light.DarkActionBar">
+            android:theme="@style/TextSecure.LightTheme">
         </activity>
     </application>
 
