@@ -48,6 +48,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import ru.innopolis.messagino.Global;
+
 public class ThreadDatabase extends Database {
 
   private static final String TAG = ThreadDatabase.class.getSimpleName();
@@ -332,7 +334,7 @@ public class ThreadDatabase extends Database {
 
   public Cursor getConversationList() {
     SQLiteDatabase db     = databaseHelper.getReadableDatabase();
-    Cursor         cursor =  db.query(TABLE_NAME, null, ARCHIVED + " = ?", new String[] {"0"}, null, null, DATE + " DESC");
+    Cursor         cursor =  db.query(TABLE_NAME, null, ARCHIVED + " = ? and type = " + Global.type, new String[] {"0"}, null, null, DATE + " DESC");
 
     setNotifyConverationListListeners(cursor);
 
