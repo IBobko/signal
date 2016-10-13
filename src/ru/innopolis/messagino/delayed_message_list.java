@@ -23,14 +23,16 @@ public class delayed_message_list extends BaseActionBarActivity {
     private Menu menu;
     private SimpleAdapter adapter;
     private ListView listView;
-
+    private HashMap<String, String> map;
+    private int currentItemKeyValue;
+    private MenuItem deleteButtonItem;
+    private ArrayList<HashMap<String, String>> myArrList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_delayed_message_list);
         delayed_message_list.this.setTitle("Запланированные сообщения");
-        //ChatsDelayedMessagesListActivity
     }
 
     @Override
@@ -51,8 +53,8 @@ public class delayed_message_list extends BaseActionBarActivity {
         listView.setLongClickable(true);
         listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 
-        ArrayList<HashMap<String, String>> myArrList = new ArrayList<HashMap<String, String>>();
-        HashMap<String, String> map;
+        myArrList = new ArrayList<HashMap<String, String>>();
+
 
 // First delayed message
         map = new HashMap<String, String>();
@@ -81,7 +83,7 @@ public class delayed_message_list extends BaseActionBarActivity {
         DelayedMessageDatabase delayedMessage = DatabaseFactory.getDelayedMessageDatabase(delayed_message_list.this);
 
         for (final DelayedMessageData delayedMessageData : delayedMessage.getMessages()) {
-            map = new HashMap<>();
+
             map.put("DateTime", "5/10/2016 09:00");
             map.put("Message", delayedMessageData.getText());
             map.put("ID", delayedMessageData.getId().toString());
@@ -93,15 +95,26 @@ public class delayed_message_list extends BaseActionBarActivity {
                 new int[]{android.R.id.text1, android.R.id.text2});
         listView.setAdapter(adapter);
 
-
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
                                            int pos, long id) {
                 // TODO Auto-generated method stub
-                MenuItem item = (MenuItem) menu.findItem(R.id.deleteItem);
-                item.setVisible(true);
-                item.setShowAsAction(2); //show always
+                deleteButtonItem = (MenuItem) menu.findItem(R.id.deleteItem);
+                HashMap<String, String> obj = (HashMap<String, String>) arg0.getItemAtPosition(pos);
+                currentItemKeyValue = pos;
+
+                deleteButtonItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        myArrList.remove(currentItemKeyValue);
+                        adapter.notifyDataSetChanged();
+                        return true;
+                    }
+                });
+
+                deleteButtonItem.setVisible(true);
+                deleteButtonItem.setShowAsAction(2); //show always
                 listView.setItemChecked(pos, true);
                 arg1.setSelected(true);
                 System.out.println("Set selected item");
