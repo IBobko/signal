@@ -45,6 +45,9 @@ import org.thoughtcrime.securesms.util.DynamicLanguage;
 import org.thoughtcrime.securesms.util.DynamicTheme;
 import org.thoughtcrime.securesms.util.TextSecurePreferences;
 
+import ru.innopolis.messagino.Global;
+import ru.innopolis.messagino.GroupListActivity;
+
 public class ConversationListActivity extends PassphraseRequiredActionBarActivity
     implements ConversationListFragment.ConversationSelectedListener
 {
@@ -103,6 +106,10 @@ public class ConversationListActivity extends PassphraseRequiredActionBarActivit
     MenuItem menuItem = menu.findItem(R.id.menu_search);
     initializeSearch(menuItem);
 
+
+    MenuItem menuItem2 = menu.findItem(R.id.menu_groups);
+    initializeGroups(menuItem2);
+
     super.onPrepareOptionsMenu(menu);
     return true;
   }
@@ -144,6 +151,33 @@ public class ConversationListActivity extends PassphraseRequiredActionBarActivit
     });
   }
 
+  private void initializeGroups(MenuItem searchViewItem) {
+
+    final ConversationListActivity that = this;
+
+    searchViewItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+      @Override
+      public boolean onMenuItemClick(MenuItem item) {
+        if (Global.type == 0)
+        Global.type = 2;
+        else
+          Global.type = 0;
+
+
+        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_HOME | ActionBar.DISPLAY_SHOW_TITLE);
+        getSupportActionBar().setTitle(R.string.app_name);
+        fragment = initFragment(android.R.id.content, new ConversationListFragment(), masterSecret, dynamicLanguage.getCurrentLocale());
+
+        initializeContactUpdatesReceiver();
+
+        DirectoryRefreshListener.schedule(that);
+        RatingManager.showRatingDialogIfNecessary(that);
+
+        return true;
+      }
+    });
+  }
+
   @Override
   public boolean onOptionsItemSelected(MenuItem item) {
     super.onOptionsItemSelected(item);
@@ -153,12 +187,18 @@ public class ConversationListActivity extends PassphraseRequiredActionBarActivit
     case R.id.menu_settings:          handleDisplaySettings(); return true;
     case R.id.menu_clear_passphrase:  handleClearPassphrase(); return true;
     case R.id.menu_mark_all_read:     handleMarkAllRead();     return true;
+    case R.id.menu_groups:            ShowGroups();            return true;
     case R.id.menu_import_export:     handleImportExport();    return true;
     case R.id.menu_invite:            handleInvite();          return true;
     case R.id.menu_help:              handleHelp();            return true;
     }
 
     return false;
+  }
+
+  private void ShowGroups() {
+    Intent intent = new Intent(this, GroupListActivity.class);
+    startActivity(intent);
   }
 
   @Override

@@ -23,6 +23,7 @@
                   android:clipToPadding="false"
                   android:clipChildren="false">
 
+
         <org.thoughtcrime.securesms.components.reminder.ReminderView
             android:id="@+id/reminder"
             android:layout_width="match_parent"
