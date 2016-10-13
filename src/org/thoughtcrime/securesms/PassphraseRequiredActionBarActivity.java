@@ -37,7 +37,7 @@ public abstract class PassphraseRequiredActionBarActivity extends BaseActionBarA
   private boolean           isVisible;
 
   @Override
-  protected final void onCreate(Bundle savedInstanceState) {
+  protected void onCreate(Bundle savedInstanceState) {
     Log.w(TAG, "onCreate(" + savedInstanceState + ")");
     onPreCreate();
     final MasterSecret masterSecret = KeyCachingService.getMasterSecret(this);

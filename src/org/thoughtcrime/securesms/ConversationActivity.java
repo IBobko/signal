@@ -145,7 +145,7 @@ import java.security.SecureRandom;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-import ru.innopolis.messagino.ChatsDelayedMessagesList;
+import ru.innopolis.messagino.delayed_message_list;
 import ws.com.google.android.mms.ContentType;
 
 import static org.thoughtcrime.securesms.TransportOption.Type;
@@ -287,6 +287,7 @@ public class ConversationActivity extends PassphraseRequiredActionBarActivity
         composeText.setTransport(sendButton.getSelectedTransport());
 
         titleView.setTitle(recipients);
+
         setActionBarColor(recipients.getColor());
         setBlockedUserState(recipients);
         calculateCharactersRemaining();
@@ -574,7 +575,7 @@ public class ConversationActivity extends PassphraseRequiredActionBarActivity
         titleView.performClick();
     }
     private void showDelayedMessageList() {
-        Intent intent = new Intent(this, ChatsDelayedMessagesList.class);
+        Intent intent = new Intent(this, delayed_message_list.class);
         startActivity(intent);
     }
 

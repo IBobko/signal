@@ -732,7 +732,7 @@
     <!-- expiration -->
 
     <string name="expiration_off">Off</string>
-    
+
     <plurals name="expiration_seconds">
         <item quantity="one">1 second</item>
         <item quantity="other">%d seconds</item>
@@ -1263,6 +1263,11 @@
 
     <!-- transport_selection_list_item -->
     <string name="transport_selection_list_item__transport_icon">Transport icon</string>
+    <string name="title_activity_chats_delayed_messages_list">ChatsDelayedMessagesListActivity
+    </string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_delayed_messages_list">DelayedMessagesListActivity</string>
+    <string name="title_activity_delayed_message_list">delayed_message_list</string>
 
 
     <!-- EOF -->

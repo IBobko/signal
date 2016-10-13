@@ -12,9 +12,7 @@
 
     <item android:title="@string/conversation_context__menu_forward_message"
           android:id="@+id/menu_context_forward"
-          android:icon="?menu_forward_icon"
-          app:showAsAction="ifRoom" />
-
+          android:icon="?menu_forward_icon" />
     <item android:title="@string/conversation_context__menu_resend_message"
           android:id="@+id/menu_context_resend"
           android:visible="false"

@@ -32,7 +32,7 @@ public class ChatsDelayedMessagesList extends Activity {
     protected void onResume() {
         super.onResume();
 
-        setContentView(R.layout.delay_messages_list);
+        setContentView(R.layout.activity_delayed_messages_list);
 
         final ListView listView = (ListView)findViewById(R.id.delayedMessagesList);
         addButton = (Button)findViewById(R.id.addButton);
