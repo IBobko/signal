@@ -92,7 +92,6 @@ public class ChatsDelayedMessagesList extends Activity {
                 myIntent.putExtra("MESSAGE_ID", (String)row.get("ID")); //Optional parameters
                 myIntent.putExtra("MESSAGE_TEXT", (String)row.get("Message")); //Optional parameters
                 ChatsDelayedMessagesList.this.startActivity(myIntent);
-
             }
         });
     }
