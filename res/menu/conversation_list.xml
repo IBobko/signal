@@ -8,4 +8,9 @@
           app:actionViewClass="android.support.v7.widget.SearchView"
           app:showAsAction="ifRoom|collapseActionView" />
 
+    <item android:title="@string/conversation_list__menu_search"
+        android:id="@+id/menu_groups"
+        android:icon="?attr/menu_search_icon"
+        app:actionViewClass="android.support.v7.widget.SearchView"
+        app:showAsAction="ifRoom|collapseActionView" />
 </menu>
