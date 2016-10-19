@@ -2,7 +2,6 @@ package ru.innopolis.messagino;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,6 +14,7 @@ import org.thoughtcrime.securesms.R;
 import org.thoughtcrime.securesms.database.DatabaseFactory;
 import org.thoughtcrime.securesms.database.DelayedMessageDatabase;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -23,7 +23,6 @@ public class delayed_message_list extends BaseActionBarActivity {
     private Menu menu;
     private SimpleAdapter adapter;
     private ListView listView;
-    private HashMap<String, String> map;
     private int currentItemKeyValue;
     private MenuItem deleteButtonItem;
     private MenuItem addButtonItem;
@@ -71,51 +70,23 @@ public class delayed_message_list extends BaseActionBarActivity {
     protected void onResume() {
         super.onResume();
 
-
         setContentView(R.layout.activity_delayed_messages_list);
 
         listView = (ListView) findViewById(R.id.delayedMessagesList);
         listView.setLongClickable(true);
         listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 
-        myArrList = new ArrayList<HashMap<String, String>>();
+        myArrList = new ArrayList<>();
 
-
-// First delayed message
-        map = new HashMap<String, String>();
-        map.put("DateTime", "29/09/2016 18:00");
-        map.put("Message", "Please don't forgot  give me money");
-        myArrList.add(map);
-
-// Second delayed message
-        map = new HashMap<String, String>();
-        map.put("DateTime", "01/10/2016 09:00");
-        map.put("Message", "C днем пожилых людей");
-        myArrList.add(map);
-
-// Third delayed message
-        map = new HashMap<String, String>();
-        map.put("DateTime", "4/10/2016 09:00");
-        map.put("Message", "С днем космических войск");
-        myArrList.add(map);
-
-// Fourd delayed message
-        map = new HashMap<String, String>();
-        map.put("DateTime", "5/10/2016 09:00");
-        map.put("Message", "Всех TA  с днем учителя :)");
-        myArrList.add(map);
-
-        DelayedMessageDatabase delayedMessage = DatabaseFactory.getDelayedMessageDatabase(delayed_message_list.this);
+        final DelayedMessageDatabase delayedMessage = DatabaseFactory.getDelayedMessageDatabase(delayed_message_list.this);
 
         for (final DelayedMessageData delayedMessageData : delayedMessage.getMessages()) {
-
-            map.put("DateTime", "5/10/2016 09:00");
+            final HashMap<String, String> map = new HashMap<>();
+            map.put("DateTime", DateFormat.getDateTimeInstance().format(delayedMessageData.getDateForSending().getTime()));
             map.put("Message", delayedMessageData.getText());
             map.put("ID", delayedMessageData.getId().toString());
             myArrList.add(map);
         }
-
-
 
         adapter = new SimpleAdapter(this, myArrList, android.R.layout.simple_list_item_2,
                 new String[]{"DateTime", "Message"},
