@@ -32,6 +32,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.os.Vibrator;
 import android.provider.Browser;
 import android.provider.ContactsContract;
@@ -140,11 +141,14 @@ import org.whispersystems.libsignal.InvalidMessageException;
 import org.whispersystems.libsignal.util.guava.Optional;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+import ru.innopolis.messagino.Global;
+import ru.innopolis.messagino.RRecipients;
 import ru.innopolis.messagino.delayed_message_list;
 import ws.com.google.android.mms.ContentType;
 
@@ -576,6 +580,7 @@ public class ConversationActivity extends PassphraseRequiredActionBarActivity
     }
     private void showDelayedMessageList() {
         Intent intent = new Intent(this, delayed_message_list.class);
+        Global.recipients = recipients;
         startActivity(intent);
     }
 

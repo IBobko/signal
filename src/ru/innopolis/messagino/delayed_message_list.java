@@ -13,10 +13,12 @@ import org.thoughtcrime.securesms.BaseActionBarActivity;
 import org.thoughtcrime.securesms.R;
 import org.thoughtcrime.securesms.database.DatabaseFactory;
 import org.thoughtcrime.securesms.database.DelayedMessageDatabase;
+import org.thoughtcrime.securesms.recipients.Recipient;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class delayed_message_list extends BaseActionBarActivity {
@@ -28,12 +30,15 @@ public class delayed_message_list extends BaseActionBarActivity {
     private MenuItem addButtonItem;
     private MenuItem archiveButton;
     private ArrayList<HashMap<String, String>> myArrList;
+    private List<DelayedMessageData> listOfMessages;
+    private RRecipients recipients;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_delayed_message_list);
         delayed_message_list.this.setTitle(R.string.title_activity_delayed_messages);
+
     }
 
     @Override
@@ -46,8 +51,8 @@ public class delayed_message_list extends BaseActionBarActivity {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 Intent myIntent = new Intent(delayed_message_list.this, DelayedMessageActivity.class);
-                myIntent.putExtra("MESSAGE_ID", ""); //Optional parameters
-                myIntent.putExtra("MESSAGE_TEXT", ""); //Optional parameters
+                DelayedMessageData dmd = new DelayedMessageData();
+                //todo add recipients
                 delayed_message_list.this.startActivity(myIntent);
                 return true;
             }
@@ -76,7 +81,16 @@ public class delayed_message_list extends BaseActionBarActivity {
 
         myArrList = new ArrayList<>();
 
+
+
+        List<Recipient> r = Global.recipients.getRecipientsList();
+        for (Recipient r1: r) {
+            System.out.println(r1.getName());
+        }
+
+
         final DelayedMessageDatabase delayedMessage = DatabaseFactory.getDelayedMessageDatabase(delayed_message_list.this);
+//        listOfMessages = delayedMessage.getByRecipientAndStatus();
 
         for (final DelayedMessageData delayedMessageData : delayedMessage.getMessages()) {
             final HashMap<String, String> map = new HashMap<>();
@@ -122,10 +136,8 @@ public class delayed_message_list extends BaseActionBarActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Map row = (Map) listView.getAdapter().getItem(position);
-                DelayedMessageData dmd = new DelayedMessageData();
-                dmd.setId(Integer.parseInt((String) row.get("ID")));
-                dmd.setId(Integer.parseInt((String) row.get("Message")));
+
+                DelayedMessageData dmd = listOfMessages.get(position);
                 Intent myIntent = new Intent(delayed_message_list.this, DelayedMessageActivity.class);
                 myIntent.putExtra("DelayedMessage", dmd); //Optional parameters
                 delayed_message_list.this.startActivity(myIntent);
