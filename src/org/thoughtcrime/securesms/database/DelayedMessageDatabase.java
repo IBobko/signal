@@ -79,10 +79,16 @@ public class DelayedMessageDatabase extends Database {
         return messageData;
     }
 
+    public  List<DelayedMessageData> getByRecipientAndStatus(final String recipient,final Integer status) {
+        final SQLiteDatabase database = databaseHelper.getReadableDatabase();
+        final Cursor cursor = database.rawQuery("SELECT " + ID + ", " + RECIPIENT + "," + MESSAGE + "," + DT + "," + STATUS + " FROM " + TABLE_NAME + " WHERE " + RECIPIENT + " = ?, " + STATUS + "= ?", new String[]{recipient,status.toString()});
+        return getByCursor(cursor);
+    }
+
 
     public  List<DelayedMessageData> getByRecipient(final String recipient) {
         final SQLiteDatabase database = databaseHelper.getReadableDatabase();
-        final Cursor cursor = database.rawQuery("SELECT " + ID + ", " + RECIPIENT + "," + MESSAGE + "," + DT + " FROM " + TABLE_NAME + " WHERE " + RECIPIENT + " = ?", new String[]{recipient});
+        final Cursor cursor = database.rawQuery("SELECT " + ID + ", " + RECIPIENT + "," + MESSAGE + "," + DT + "," + STATUS + " FROM " + TABLE_NAME + " WHERE " + RECIPIENT + " = ?", new String[]{recipient});
         return getByCursor(cursor);
     }
 
