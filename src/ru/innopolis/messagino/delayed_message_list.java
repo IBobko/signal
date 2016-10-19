@@ -26,6 +26,7 @@ public class delayed_message_list extends BaseActionBarActivity {
     private HashMap<String, String> map;
     private int currentItemKeyValue;
     private MenuItem deleteButtonItem;
+    private MenuItem addButtonItem;
     private ArrayList<HashMap<String, String>> myArrList;
 
     @Override
@@ -40,12 +41,25 @@ public class delayed_message_list extends BaseActionBarActivity {
 
         delayed_message_list.this.menu = menu;
         getMenuInflater().inflate(R.menu.menu_chats_delayed_messages_list, menu);
+        addButtonItem = (MenuItem) menu.findItem(R.id.AddDM);
+
+        addButtonItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                Intent myIntent = new Intent(delayed_message_list.this, DelayedMessageActivity.class);
+                myIntent.putExtra("MESSAGE_ID", ""); //Optional parameters
+                myIntent.putExtra("MESSAGE_TEXT", ""); //Optional parameters
+                delayed_message_list.this.startActivity(myIntent);
+                return true;
+            }
+        });
         return true;
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+
 
         setContentView(R.layout.activity_delayed_messages_list);
 
@@ -89,6 +103,8 @@ public class delayed_message_list extends BaseActionBarActivity {
             map.put("ID", delayedMessageData.getId().toString());
             myArrList.add(map);
         }
+
+
 
         adapter = new SimpleAdapter(this, myArrList, android.R.layout.simple_list_item_2,
                 new String[]{"DateTime", "Message"},
