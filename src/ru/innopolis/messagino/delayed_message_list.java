@@ -33,14 +33,12 @@ public class delayed_message_list extends BaseActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_delayed_message_list);
-
+        delayed_message_list.this.setTitle(R.string.title_activity_delayed_messages);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         delayed_message_list.this.menu = menu;
-        delayed_message_list.this.setTitle("Запланированные сообщения");
-
         getMenuInflater().inflate(R.menu.menu_chats_delayed_messages_list, menu);
         addButtonItem = (MenuItem) menu.findItem(R.id.AddDM);
 
@@ -72,7 +70,6 @@ public class delayed_message_list extends BaseActionBarActivity {
         super.onResume();
 
         setContentView(R.layout.activity_delayed_messages_list);
-
         listView = (ListView) findViewById(R.id.delayedMessagesList);
         listView.setLongClickable(true);
         listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
@@ -126,9 +123,11 @@ public class delayed_message_list extends BaseActionBarActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Map row = (Map) listView.getAdapter().getItem(position);
+                DelayedMessageData dmd = new DelayedMessageData();
+                dmd.setId(Integer.parseInt((String) row.get("ID")));
+                dmd.setId(Integer.parseInt((String) row.get("Message")));
                 Intent myIntent = new Intent(delayed_message_list.this, DelayedMessageActivity.class);
-                myIntent.putExtra("MESSAGE_ID", (String) row.get("ID")); //Optional parameters
-                myIntent.putExtra("MESSAGE_TEXT", (String) row.get("Message")); //Optional parameters
+                myIntent.putExtra("DelayedMessage", dmd); //Optional parameters
                 delayed_message_list.this.startActivity(myIntent);
             }
         });
