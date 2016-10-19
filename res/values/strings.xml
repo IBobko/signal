@@ -967,6 +967,7 @@
 
     <!-- arrays.xml -->
     <string name="arrays__import_export">Import / export</string>
+    <string name="arrays__show_all_delayed_messages">Show all delayed messages</string>
     <string name="arrays__your_identity_key">Your identity key</string>
     <string name="arrays__use_default">Use default</string>
     <string name="arrays__use_custom">Use custom</string>
@@ -1266,9 +1267,10 @@
     <string name="conversation__menu_groups" >Groups</string>
     <string name="action_settings" >Action Serrings</string>
 
-    <string name="title_activity_delayed_message_list" >Action Serrings</string>
+    <string name="title_activity_delayed_message_list" >Action Settings</string>
 
-    <string name="title_activity_delayed_messages_list" >Action Serrings</string>
+    <string name="title_activity_delayed_messages_list" >Action Settings</string>
+    <string name="title_activity_sended_delayed_messages_list" >Sended messages</string>
     <!-- EOF -->
 
 </resources>

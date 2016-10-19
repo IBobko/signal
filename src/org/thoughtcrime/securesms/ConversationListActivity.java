@@ -45,7 +45,9 @@ import org.thoughtcrime.securesms.util.DynamicLanguage;
 import org.thoughtcrime.securesms.util.DynamicTheme;
 import org.thoughtcrime.securesms.util.TextSecurePreferences;
 
+import ru.innopolis.messagino.All_delayed_message_list;
 import ru.innopolis.messagino.Global;
+import ru.innopolis.messagino.delayed_message_list;
 
 public class ConversationListActivity extends PassphraseRequiredActionBarActivity
     implements ConversationListFragment.ConversationSelectedListener
@@ -177,10 +179,17 @@ public class ConversationListActivity extends PassphraseRequiredActionBarActivit
     case R.id.menu_import_export:     handleImportExport();    return true;
     case R.id.menu_invite:            handleInvite();          return true;
     case R.id.menu_help:              handleHelp();            return true;
+    case R.id.show_all_delayed_messages:              showAllDelayedMessages();            return true;
     }
 
     return false;
   }
+
+  private void showAllDelayedMessages() {
+    Intent intent = new Intent(this, All_delayed_message_list.class);
+    startActivity(intent);
+  }
+
 
   @Override
   public void onCreateConversation(long threadId, Recipients recipients, int distributionType) {

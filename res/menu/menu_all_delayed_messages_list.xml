@@ -1,4 +1,5 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="ru.innopolis.messagino.ChatsDelayedMessagesListActivity">
     <item android:title="Удалить"
@@ -6,11 +7,6 @@
         android:icon="@drawable/ic_delete_black"
         android:checkable="false"
         android:checked="true"
-        android:id="@+id/deleteItem" />
-    <item android:title="Add delayed message"
-        android:id="@+id/AddDM"
-        />
-    <item android:title="Archive"
-        android:id="@+id/Archive"
-        />
+        android:id="@+id/deleteItem"
+        android:showAsAction="always" />
 </menu>
