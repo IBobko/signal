@@ -1,6 +1,6 @@
 package ru.innopolis.messagino;
 
-import android.app.Activity;
+import org.thoughtcrime.securesms.BaseActionBarActivity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.ContentValues;
@@ -28,7 +28,7 @@ import java.util.Calendar;
  *
  * @author Vyacheslav Stepanov
  */
-public class DelayedMessageActivity extends Activity implements OnClickListener {
+public class DelayedMessageActivity extends BaseActionBarActivity implements OnClickListener {
     final DelayedMessageData delayedMessageData = new DelayedMessageData();
     private TextView dateText;
     private TextView timeText;
