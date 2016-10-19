@@ -74,8 +74,8 @@ public class DatabaseFactory {
   private static final int INTRODUCED_SUBSCRIPTION_ID_VERSION              = 27;
   private static final int INTRODUCED_EXPIRE_MESSAGES_VERSION              = 28;
   private static final int INTRODUCED_DELAYED_MESSAGES_VERSION             = 29;
-  private static final int INTRODUCED_SAVING_MESSAGES_VERSION             = 31;
-  private static final int DATABASE_VERSION                                = 31;
+  private static final int INTRODUCED_SAVING_MESSAGES_VERSION             = 36;
+  private static final int DATABASE_VERSION                                = 36;
 
   private static final String DATABASE_NAME    = "messages.db";
   private static final Object lock             = new Object();
@@ -537,7 +537,8 @@ public class DatabaseFactory {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
       db.beginTransaction();
 
-      if (oldVersion < INTRODUCED_DELAYED_MESSAGES_VERSION) {
+      if (oldVersion < INTRODUCED_SAVING_MESSAGES_VERSION) {
+        db.execSQL(DelayedMessageDatabase.DROP_TABLE);
         db.execSQL(DelayedMessageDatabase.CREATE_TABLE);
       }
 
