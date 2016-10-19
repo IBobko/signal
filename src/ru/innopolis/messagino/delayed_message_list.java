@@ -33,13 +33,14 @@ public class delayed_message_list extends BaseActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_delayed_message_list);
-        delayed_message_list.this.setTitle("Запланированные сообщения");
+
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-
         delayed_message_list.this.menu = menu;
+        delayed_message_list.this.setTitle("Запланированные сообщения");
+
         getMenuInflater().inflate(R.menu.menu_chats_delayed_messages_list, menu);
         addButtonItem = (MenuItem) menu.findItem(R.id.AddDM);
 
@@ -97,16 +98,17 @@ public class delayed_message_list extends BaseActionBarActivity {
             @Override
             public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
                                            int pos, long id) {
-                // TODO Auto-generated method stub
-                deleteButtonItem = (MenuItem) menu.findItem(R.id.deleteItem);
                 HashMap<String, String> obj = (HashMap<String, String>) arg0.getItemAtPosition(pos);
                 currentItemKeyValue = pos;
-
+                deleteButtonItem = menu.findItem(R.id.deleteItem);
                 deleteButtonItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
+                        Integer id = Integer.parseInt(myArrList.get(currentItemKeyValue).get("ID"));
                         myArrList.remove(currentItemKeyValue);
                         adapter.notifyDataSetChanged();
+                        final DelayedMessageDatabase delayedMessage = DatabaseFactory.getDelayedMessageDatabase(delayed_message_list.this);
+                        delayedMessage.delete(id);
                         return true;
                     }
                 });

@@ -87,4 +87,10 @@ public class DelayedMessageDatabase extends Database {
         }
     }
 
+
+    public void delete(final Integer id) {
+        if (id == null) return;
+        getDb().delete(TABLE_NAME,ID + " = ?", new String[]{id.toString()});
+    }
+
 }
