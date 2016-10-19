@@ -20,7 +20,10 @@ import org.thoughtcrime.securesms.database.DatabaseFactory;
 import org.thoughtcrime.securesms.database.DelayedMessageDatabase;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 
 /**
@@ -45,7 +48,7 @@ public class DelayedMessageActivity extends Activity implements OnClickListener 
             } catch(NumberFormatException ignore) {}
 
 
-            String text = intent.getExtras().getString("MESSAGE_TEXT");
+            final String text = intent.getExtras().getString("MESSAGE_TEXT");
 
             if (text!=null) {
                 textMessage.setText(text);
@@ -114,20 +117,16 @@ public class DelayedMessageActivity extends Activity implements OnClickListener 
 
     private void save(View v) {
         final DelayedMessageDatabase delayedMessage = DatabaseFactory.getDelayedMessageDatabase(DelayedMessageActivity.this);
-
-        final ContentValues contentValues = new ContentValues();
-        contentValues.put("message",textMessage.getText().toString());
-
-        final SQLiteDatabase db = delayedMessage.getDb();
-
-        if (delayedMessageData.getId()!=null && delayedMessageData.getId()!=0) {
-            db.update("delayed_message", contentValues, "_id = " + delayedMessageData.getId(), null);
-        } else {
-            db.insert("delayed_message", null,  contentValues);
-        }
-
+        final String dt = dateText.getText().toString() + " " + timeText.getText().toString();
+        final Calendar g = new GregorianCalendar();
+        try {
+            final Date dtDate = DateFormat.getDateTimeInstance().parse(dt);
+            g.setTime(dtDate);
+        } catch (final ParseException ignored) {}
+        delayedMessageData.setText(textMessage.getText().toString());
+        delayedMessageData.setDateForSending(g);
+        delayedMessage.save(delayedMessageData);
         finish();
-
     }
 
     public void showTimePickerDialog(View v) {
