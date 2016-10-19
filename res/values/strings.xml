@@ -1269,7 +1269,8 @@
 
     <string name="title_activity_delayed_message_list" >Action Serrings</string>
 
-    <string name="title_activity_delayed_messages_list" >Action Serrings</string>
+    <string name="title_activity_delayed_messages_list" >Action Settings</string>
+    <string name="title_activity_all_delayed_messages_list" >All planned messages</string>
     <!-- EOF -->
 
 </resources>

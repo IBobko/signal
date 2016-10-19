@@ -48,11 +48,9 @@ public class All_delayed_message_list extends BaseActionBarActivity {
         super.onResume();
 
         setContentView(R.layout.activity_all_delayed_message_list);
-
-        listView = (ListView) findViewById(R.id.delayedMessagesList);
+        listView = (ListView) findViewById(R.id.alldelayedMessagesList);
         listView.setLongClickable(true);
         listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-
         myArrList = new ArrayList<HashMap<String, String>>();
 
 
