@@ -98,7 +98,6 @@ public class delayed_message_list extends BaseActionBarActivity {
             @Override
             public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
                                            int pos, long id) {
-                HashMap<String, String> obj = (HashMap<String, String>) arg0.getItemAtPosition(pos);
                 currentItemKeyValue = pos;
                 deleteButtonItem = menu.findItem(R.id.deleteItem);
                 deleteButtonItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {

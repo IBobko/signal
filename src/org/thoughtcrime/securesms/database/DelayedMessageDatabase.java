@@ -23,19 +23,21 @@ import ru.innopolis.messagino.DelayedMessageData;
 public class DelayedMessageDatabase extends Database {
     private static final String TABLE_NAME  = "delayed_message";
     public static final String ID          = "_id";
-    public static final String DT  = "dt";
-    public static final String MESSAGE  = "message";
-    public static final String RECIPIENT = "recipient";
-    public static final String DROP_TABLE = "DROP TABLE " + TABLE_NAME + ";";
+    private static final String DT  = "dt";
+    private static final String MESSAGE  = "message";
+    private static final String RECIPIENT = "recipient";
+    public static final String STATUS = "status";
+    static final String DROP_TABLE = "DROP TABLE " + TABLE_NAME + ";";
 
-    public static DateFormat dateFormat = DateFormat.getDateTimeInstance();
+    private static DateFormat dateFormat = DateFormat.getDateTimeInstance();
 
     public static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + " (" + ID + " INTEGER PRIMARY KEY, " +
             RECIPIENT + " INTEGER," +
             DT + " TEXT," +
+            STATUS + " INTEGER," +
             MESSAGE + " TEXT);";
 
-    public DelayedMessageDatabase(final Context context, final SQLiteOpenHelper databaseHelper) {
+    DelayedMessageDatabase(final Context context, final SQLiteOpenHelper databaseHelper) {
         super(context, databaseHelper);
     }
 
@@ -45,33 +47,43 @@ public class DelayedMessageDatabase extends Database {
     }
 
     public List<DelayedMessageData> getMessages() {
-        SQLiteDatabase database = databaseHelper.getReadableDatabase();
+        final SQLiteDatabase database = databaseHelper.getReadableDatabase();
+        final Cursor cursor = database.rawQuery("SELECT " + ID + ", " + RECIPIENT + "," + MESSAGE + "," + DT + " FROM " + TABLE_NAME, new String[]{});
+        return getByCursor(cursor);
+    }
 
-        Cursor cursor = database.rawQuery("SELECT " + ID + ", " + RECIPIENT + "," + MESSAGE + "," + DT + " FROM " + TABLE_NAME, new String[]{});
+    private DelayedMessageData delayedMessageDataFromCursor(final Cursor cursor) {
+        final DelayedMessageData delayedMessageData = new DelayedMessageData();
+        delayedMessageData.setId(cursor.getInt(0));
+        delayedMessageData.setPerson(cursor.getString(1));
+        delayedMessageData.setText(""+cursor.getString(2));
+        Calendar calendar = new GregorianCalendar();
+        try {
+            final Date dt = DateFormat.getDateTimeInstance().parse(cursor.getString(3));
+            calendar.setTime(dt);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        delayedMessageData.setDateForSending(calendar);
+        return delayedMessageData;
+    }
 
+
+    private List<DelayedMessageData> getByCursor(final Cursor cursor) {
         final ArrayList<DelayedMessageData> messageData = new ArrayList<>();
-
         while(cursor.moveToNext()) {
-            final DelayedMessageData delayedMessageData = new DelayedMessageData();
-            for (int i = 0; i < cursor.getColumnCount(); i++) {
-                System.out.println(cursor.getColumnName(i) + " " + i);
-            }
-            delayedMessageData.setId(cursor.getInt(0));
-            delayedMessageData.setPerson(cursor.getString(1));
-            delayedMessageData.setText(""+cursor.getString(2));
-            Calendar calendar = new GregorianCalendar();
-            try {
-                final Date dt = DateFormat.getDateTimeInstance().parse(cursor.getString(3));
-                calendar.setTime(dt);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-            delayedMessageData.setDateForSending(calendar);
+            final DelayedMessageData delayedMessageData = delayedMessageDataFromCursor(cursor);
             messageData.add(delayedMessageData);
-
         }
         cursor.close();
         return messageData;
+    }
+
+
+    public  List<DelayedMessageData> getByRecipient(final String recipient) {
+        final SQLiteDatabase database = databaseHelper.getReadableDatabase();
+        final Cursor cursor = database.rawQuery("SELECT " + ID + ", " + RECIPIENT + "," + MESSAGE + "," + DT + " FROM " + TABLE_NAME + " WHERE " + RECIPIENT + " = ?", new String[]{recipient});
+        return getByCursor(cursor);
     }
 
     public void save(final DelayedMessageData delayedMessageData) {
@@ -86,7 +98,6 @@ public class DelayedMessageDatabase extends Database {
             getDb().insert(TABLE_NAME, null,  newValues);
         }
     }
-
 
     public void delete(final Integer id) {
         if (id == null) return;
