@@ -3,6 +3,9 @@
 
     <item android:title="@string/text_secure_normal__menu_new_group" android:id="@+id/menu_new_group" />
 
+    <item android:title="@string/arrays__show_all_delayed_messages"
+        android:id="@+id/show_all_delayed_messages" />
+
     <item android:title="@string/text_secure_normal__menu_clear_passphrase"
           android:id="@+id/menu_clear_passphrase" />
 
