@@ -155,5 +155,9 @@ public class delayed_message_list extends BaseActionBarActivity {
                 delayed_message_list.this.startActivity(myIntent);
             }
         });
+        // change title name
+        if(status==1) {
+            delayed_message_list.this.setTitle(R.string.title_activity_archive);
+        }
     }
 }
