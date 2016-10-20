@@ -1115,5 +1115,7 @@ SMS-подтверждения...
   <string name="title_activity_sended_delayed_messages_list">Отправленные сообщения</string>
   <string name="title_activity_all_delayed_messages_list" >Все отложенные сообщения</string>
   <string name="title_activity_delayed_messages">Отложенные сообщения</string>
+  <string name="title_activity_archive">Архив</string>
+  <string name="title_add_delayed_message">Добавить отложенное сообщ.</string>
   <!--EOF-->
 </resources>
