@@ -17,7 +17,7 @@ import org.thoughtcrime.securesms.database.DelayedMessageDatabase;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 public class delayed_message_list extends BaseActionBarActivity {
     private Menu menu;
@@ -28,31 +28,35 @@ public class delayed_message_list extends BaseActionBarActivity {
     private MenuItem addButtonItem;
     private MenuItem archiveButton;
     private ArrayList<HashMap<String, String>> myArrList;
+    private List<DelayedMessageData> listOfMessages;
+    private long treadId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_delayed_message_list);
         delayed_message_list.this.setTitle(R.string.title_activity_delayed_messages);
+
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         delayed_message_list.this.menu = menu;
         getMenuInflater().inflate(R.menu.menu_chats_delayed_messages_list, menu);
-        addButtonItem = (MenuItem) menu.findItem(R.id.AddDM);
+        addButtonItem = menu.findItem(R.id.AddDM);
 
         addButtonItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 Intent myIntent = new Intent(delayed_message_list.this, DelayedMessageActivity.class);
-                myIntent.putExtra("MESSAGE_ID", ""); //Optional parameters
-                myIntent.putExtra("MESSAGE_TEXT", ""); //Optional parameters
+                DelayedMessageData dmd = new DelayedMessageData();
+                dmd.setThreadId(treadId);
+                myIntent.putExtra("DelayedMessage", dmd);
                 delayed_message_list.this.startActivity(myIntent);
                 return true;
             }
         });
-        archiveButton = (MenuItem) menu.findItem(R.id.Archive);
+        archiveButton = menu.findItem(R.id.Archive);
         archiveButton.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
@@ -76,8 +80,13 @@ public class delayed_message_list extends BaseActionBarActivity {
 
         myArrList = new ArrayList<>();
 
-        final DelayedMessageDatabase delayedMessage = DatabaseFactory.getDelayedMessageDatabase(delayed_message_list.this);
+        Intent intent = getIntent();
 
+        final Bundle extras = intent.getExtras();
+        treadId = extras.getLong("threadId");
+
+        final DelayedMessageDatabase delayedMessage = DatabaseFactory.getDelayedMessageDatabase(delayed_message_list.this);
+        listOfMessages = delayedMessage.getMessages();
         for (final DelayedMessageData delayedMessageData : delayedMessage.getMessages()) {
             final HashMap<String, String> map = new HashMap<>();
             map.put("DateTime", DateFormat.getDateTimeInstance().format(delayedMessageData.getDateForSending().getTime()));
@@ -122,17 +131,13 @@ public class delayed_message_list extends BaseActionBarActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Map row = (Map) listView.getAdapter().getItem(position);
-                DelayedMessageData dmd = new DelayedMessageData();
-                dmd.setId(Integer.parseInt((String) row.get("ID")));
-                dmd.setId(Integer.parseInt((String) row.get("Message")));
+                DelayedMessageData dmd = listOfMessages.get(position);
                 Intent myIntent = new Intent(delayed_message_list.this, DelayedMessageActivity.class);
                 myIntent.putExtra("DelayedMessage", dmd); //Optional parameters
                 delayed_message_list.this.startActivity(myIntent);
             }
         });
     }
-
 
 
 }

@@ -5,17 +5,25 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 /**
- * Created by igor on 24.09.16.
+ * @author Igor Bobko <limit-speed@yandex.ru>
  */
 
 public class DelayedMessageData implements Serializable {
-    private Integer id;
-    private String text;
-    private Calendar dateForSending;
-    private String person;
+    private Integer id = 0;
+    private String text = "";
+    private Calendar dateForSending = new GregorianCalendar();
+    private long threadId = 0;
 
     public DelayedMessageData() {
         dateForSending = new GregorianCalendar();
+    }
+
+    public long getThreadId() {
+        return threadId;
+    }
+
+    public void setThreadId(long threadId) {
+        this.threadId = threadId;
     }
 
     public Integer getId() {
@@ -40,13 +48,5 @@ public class DelayedMessageData implements Serializable {
 
     public void setDateForSending(Calendar dateForSending) {
         this.dateForSending = dateForSending;
-    }
-
-    public String getPerson() {
-        return person;
-    }
-
-    public void setPerson(String person) {
-        this.person = person;
     }
 }
