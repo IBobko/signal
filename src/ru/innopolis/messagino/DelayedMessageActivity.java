@@ -16,6 +16,8 @@ import org.thoughtcrime.securesms.BaseActionBarActivity;
 import org.thoughtcrime.securesms.R;
 import org.thoughtcrime.securesms.database.DatabaseFactory;
 import org.thoughtcrime.securesms.database.DelayedMessageDatabase;
+import org.thoughtcrime.securesms.database.ThreadDatabase;
+import org.thoughtcrime.securesms.recipients.Recipients;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -33,6 +35,7 @@ public class DelayedMessageActivity extends BaseActionBarActivity implements OnC
     private TextView dateText;
     private TextView timeText;
     private EditText textMessage;
+    private TextView textRecipient;
 
     @Override
     protected void onResume() {
@@ -43,14 +46,16 @@ public class DelayedMessageActivity extends BaseActionBarActivity implements OnC
             delayedMessageData = (DelayedMessageData) ex.getSerializable("DelayedMessage");
             if (delayedMessageData != null) {
                 textMessage.setText(delayedMessageData.getText());
-                final String dateTime = DateFormat.getDateTimeInstance().format(delayedMessageData.getDateForSending());
-                if (dateTime != null) {
-                    dateText.setText(DateFormat.getDateInstance().format(dateTime));
-                    timeText.setText(DateFormat.getTimeInstance().format(dateTime));
-                } else {
-                    final Calendar cal = Calendar.getInstance();
-                    dateText.setText(DateFormat.getDateInstance().format(cal.getTime()));
-                    timeText.setText(DateFormat.getTimeInstance().format(cal.getTime()));
+                final Calendar calendar = delayedMessageData.getDateForSending();
+                if (calendar != null) {
+                    dateText.setText(DateFormat.getDateInstance().format(calendar.getTime()));
+                    timeText.setText(DateFormat.getTimeInstance().format(calendar.getTime()));
+                }
+
+                final ThreadDatabase threadDatabase = DatabaseFactory.getThreadDatabase(this);
+                final Recipients res = threadDatabase.getRecipientsForThreadId(delayedMessageData.getThreadId());
+                if (res != null && res.getPrimaryRecipient() != null) {
+                    textRecipient.setText(res.getPrimaryRecipient().getName());
                 }
             }
         }
@@ -77,6 +82,7 @@ public class DelayedMessageActivity extends BaseActionBarActivity implements OnC
         timeText = (TextView) findViewById(R.id.textTime);
         dateText = (TextView) findViewById(R.id.textDate);
         textMessage = (EditText) findViewById(R.id.textMessage);
+        textRecipient = (TextView) findViewById(R.id.textRecipient);
     }
 
     @Override
@@ -104,7 +110,8 @@ public class DelayedMessageActivity extends BaseActionBarActivity implements OnC
         try {
             final Date dtDate = DateFormat.getDateTimeInstance().parse(dt);
             g.setTime(dtDate);
-        } catch (final ParseException ignored) {}
+        } catch (final ParseException ignored) {
+        }
         delayedMessageData.setText(textMessage.getText().toString());
         delayedMessageData.setDateForSending(g);
         delayedMessage.save(delayedMessageData);

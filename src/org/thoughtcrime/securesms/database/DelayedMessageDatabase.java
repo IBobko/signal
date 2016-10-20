@@ -79,16 +79,17 @@ public class DelayedMessageDatabase extends Database {
         return messageData;
     }
 
-    public  List<DelayedMessageData> getByRecipientAndStatus(final String recipient,final Integer status) {
+    public  List<DelayedMessageData> getByRecipientAndStatus(final long recipient,final int status) {
         final SQLiteDatabase database = databaseHelper.getReadableDatabase();
-        final Cursor cursor = database.rawQuery("SELECT " + ID + ", " + TREAD_ID + "," + MESSAGE + "," + DT + "," + STATUS + " FROM " + TABLE_NAME + " WHERE " + TREAD_ID + " = ?, " + STATUS + "= ?", new String[]{recipient,status.toString()});
+        final Cursor cursor = database.rawQuery("SELECT " + ID + ", " + TREAD_ID + "," + MESSAGE + "," + DT + "," + STATUS + " FROM " + TABLE_NAME + " WHERE " + TREAD_ID + " = ? AND " + STATUS + "= ?", new String[]{""+recipient,""+status});
         return getByCursor(cursor);
     }
 
 
-    public  List<DelayedMessageData> getByRecipient(final String recipient) {
+    @SuppressWarnings("unused")
+    public  List<DelayedMessageData> getByRecipient(final long recipient) {
         final SQLiteDatabase database = databaseHelper.getReadableDatabase();
-        final Cursor cursor = database.rawQuery("SELECT " + ID + ", " + TREAD_ID + "," + MESSAGE + "," + DT + "," + STATUS + " FROM " + TABLE_NAME + " WHERE " + TREAD_ID + " = ?", new String[]{recipient});
+        final Cursor cursor = database.rawQuery("SELECT " + ID + ", " + TREAD_ID + "," + MESSAGE + "," + DT + "," + STATUS + " FROM " + TABLE_NAME + " WHERE " + TREAD_ID + " = ?", new String[]{""+recipient});
         return getByCursor(cursor);
     }
 
@@ -97,6 +98,8 @@ public class DelayedMessageDatabase extends Database {
 
         newValues.put(MESSAGE,delayedMessageData.getText());
         newValues.put(DT,dateFormat.format(delayedMessageData.getDateForSending().getTime()));
+        newValues.put(TREAD_ID,delayedMessageData.getThreadId());
+        newValues.put(STATUS,delayedMessageData.getStatus());
 
         if (delayedMessageData.getId() != null && delayedMessageData.getId() != 0) {
             getDb().update(TABLE_NAME, newValues, ID + " = ?", new String[]{delayedMessageData.getId().toString()});

@@ -54,16 +54,14 @@ public class sended_delayed_message_list extends BaseActionBarActivity {
         listView.setLongClickable(true);
         listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 
-        myArrList = new ArrayList<HashMap<String, String>>();
+        myArrList = new ArrayList<>();
 
 
         DelayedMessageDatabase delayedMessage = DatabaseFactory.getDelayedMessageDatabase(sended_delayed_message_list.this);
 
         for (final DelayedMessageData delayedMessageData : delayedMessage.getMessages()) {
-            map = new HashMap<String, String>();
+            HashMap<String, String> map = new HashMap<>();
             map.put("DateTime", DateFormat.getDateInstance().format(delayedMessageData.getDateForSending()));
-            map.put("Recipient", delayedMessageData.getPerson());
-            //map.put("DateTime", delayedMessageData.getData());
             map.put("Message", delayedMessageData.getText());
             map.put("ID", delayedMessageData.getId().toString());
             myArrList.add(map);
@@ -79,7 +77,7 @@ public class sended_delayed_message_list extends BaseActionBarActivity {
             public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
                                            int pos, long id) {
                 // TODO Auto-generated method stub
-                deleteButtonItem = (MenuItem) menu.findItem(R.id.deleteItem);
+                deleteButtonItem = menu.findItem(R.id.deleteItem);
                 HashMap<String, String> obj = (HashMap<String, String>) arg0.getItemAtPosition(pos);
                 currentItemKeyValue = pos;
 

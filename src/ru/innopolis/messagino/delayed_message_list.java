@@ -27,16 +27,15 @@ public class delayed_message_list extends BaseActionBarActivity {
     private MenuItem deleteButtonItem;
     private MenuItem addButtonItem;
     private MenuItem archiveButton;
-    private ArrayList<HashMap<String, String>> myArrList;
     private List<DelayedMessageData> listOfMessages;
-    private long treadId;
+    private long threadId;
+    private int status = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_delayed_message_list);
         delayed_message_list.this.setTitle(R.string.title_activity_delayed_messages);
-
     }
 
     @Override
@@ -48,9 +47,9 @@ public class delayed_message_list extends BaseActionBarActivity {
         addButtonItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                Intent myIntent = new Intent(delayed_message_list.this, DelayedMessageActivity.class);
-                DelayedMessageData dmd = new DelayedMessageData();
-                dmd.setThreadId(treadId);
+                final Intent myIntent = new Intent(delayed_message_list.this, DelayedMessageActivity.class);
+                final DelayedMessageData dmd = new DelayedMessageData();
+                dmd.setThreadId(threadId);
                 myIntent.putExtra("DelayedMessage", dmd);
                 delayed_message_list.this.startActivity(myIntent);
                 return true;
@@ -60,9 +59,10 @@ public class delayed_message_list extends BaseActionBarActivity {
         archiveButton.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                Intent myIntent = new Intent(delayed_message_list.this, sended_delayed_message_list.class);
-                myIntent.putExtra("RECIPIENT", ""); //Optional parameters
-                delayed_message_list.this.startActivity(myIntent);
+                Intent myIntent = new Intent(delayed_message_list.this, delayed_message_list.class);
+                myIntent.putExtra("threadId", threadId);
+                myIntent.putExtra("status", 1);
+                startActivity(myIntent);
                 return true;
             }
         });
@@ -78,16 +78,17 @@ public class delayed_message_list extends BaseActionBarActivity {
         listView.setLongClickable(true);
         listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 
-        myArrList = new ArrayList<>();
+        final ArrayList<HashMap<String, String>> myArrList = new ArrayList<>();
 
         Intent intent = getIntent();
 
         final Bundle extras = intent.getExtras();
-        treadId = extras.getLong("threadId");
+        threadId = extras.getLong("threadId");
+        status = extras.getInt("status",0);
 
         final DelayedMessageDatabase delayedMessage = DatabaseFactory.getDelayedMessageDatabase(delayed_message_list.this);
-        listOfMessages = delayedMessage.getMessages();
-        for (final DelayedMessageData delayedMessageData : delayedMessage.getMessages()) {
+        listOfMessages = delayedMessage.getByRecipientAndStatus(threadId,status);
+        for (final DelayedMessageData delayedMessageData : listOfMessages) {
             final HashMap<String, String> map = new HashMap<>();
             map.put("DateTime", DateFormat.getDateTimeInstance().format(delayedMessageData.getDateForSending().getTime()));
             map.put("Message", delayedMessageData.getText());
@@ -127,7 +128,6 @@ public class delayed_message_list extends BaseActionBarActivity {
             }
         });
 
-        //266013 Send to Edit message preview
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -138,6 +138,4 @@ public class delayed_message_list extends BaseActionBarActivity {
             }
         });
     }
-
-
 }

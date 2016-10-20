@@ -13,9 +13,18 @@ public class DelayedMessageData implements Serializable {
     private String text = "";
     private Calendar dateForSending = new GregorianCalendar();
     private long threadId = 0;
+    private int status = 0;
 
     public DelayedMessageData() {
         dateForSending = new GregorianCalendar();
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
     }
 
     public long getThreadId() {
