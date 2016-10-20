@@ -1027,6 +1027,7 @@ SMS-подтверждения...
   <string name="conversation_unmuted__mute_notifications">Откл. звук уведомлений</string>
   <!--conversation-->
   <string name="conversation__menu_add_attachment">Добавить вложение</string>
+  <string name="conversation__menu_late_messages">Позднее сообщение</string>
   <string name="conversation__menu_update_group">Обновить группу</string>
   <string name="conversation__menu_leave_group">Покинуть группу</string>
   <string name="conversation__menu_delete_thread">Удалить разговор</string>
