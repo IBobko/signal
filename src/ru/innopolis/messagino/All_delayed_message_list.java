@@ -17,6 +17,7 @@ import org.thoughtcrime.securesms.database.DelayedMessageDatabase;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class All_delayed_message_list extends BaseActionBarActivity {
@@ -25,12 +26,13 @@ public class All_delayed_message_list extends BaseActionBarActivity {
     private ListView listView;
     private int currentItemKeyValue;
     private MenuItem deleteButtonItem;
+    private List<DelayedMessageData> listOfMessages;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_all_delayed_message_list);
-        All_delayed_message_list.this.setTitle("Запланированные сообщения");
+        setTitle("Запланированные сообщения");
     }
 
     @Override
@@ -51,7 +53,7 @@ public class All_delayed_message_list extends BaseActionBarActivity {
         final ArrayList<HashMap<String, String>> myArrList = new ArrayList<>();
 
         final DelayedMessageDatabase delayedMessage = DatabaseFactory.getDelayedMessageDatabase(All_delayed_message_list.this);
-
+        listOfMessages = delayedMessage.getMessages();
         for (final DelayedMessageData delayedMessageData : delayedMessage.getMessages()) {
             final HashMap<String, String> map = new HashMap<>();
             map.put("DateTime", DateFormat.getDateTimeInstance().format(delayedMessageData.getDateForSending().getTime()));
@@ -96,15 +98,11 @@ public class All_delayed_message_list extends BaseActionBarActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Map row = (Map) listView.getAdapter().getItem(position);
+                DelayedMessageData dmd = listOfMessages.get(position);
                 Intent myIntent = new Intent(All_delayed_message_list.this, DelayedMessageActivity.class);
-                myIntent.putExtra("MESSAGE_ID", (String) row.get("ID")); //Optional parameters
-                myIntent.putExtra("MESSAGE_TEXT", (String) row.get("Message")); //Optional parameters
+                myIntent.putExtra("DelayedMessage", dmd); //Optional parameters
                 All_delayed_message_list.this.startActivity(myIntent);
             }
         });
     }
-
-
-
 }

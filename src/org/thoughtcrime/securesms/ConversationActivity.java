@@ -32,7 +32,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.os.Vibrator;
 import android.provider.Browser;
 import android.provider.ContactsContract;
@@ -141,14 +140,11 @@ import org.whispersystems.libsignal.InvalidMessageException;
 import org.whispersystems.libsignal.util.guava.Optional;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-import ru.innopolis.messagino.Global;
-import ru.innopolis.messagino.RRecipients;
 import ru.innopolis.messagino.delayed_message_list;
 import ws.com.google.android.mms.ContentType;
 
@@ -161,7 +157,6 @@ import static org.whispersystems.signalservice.internal.push.SignalServiceProtos
  * composing/sending a new message into that thread.
  *
  * @author Moxie Marlinspike
- *
  */
 public class ConversationActivity extends PassphraseRequiredActionBarActivity
         implements ConversationFragment.ConversationFragmentListener,
@@ -170,14 +165,12 @@ public class ConversationActivity extends PassphraseRequiredActionBarActivity
         OnKeyboardShownListener,
         AttachmentDrawerListener,
         InputPanel.Listener {
-    private static final String TAG = ConversationActivity.class.getSimpleName();
-
     public static final String RECIPIENTS_EXTRA = "recipients";
     public static final String THREAD_ID_EXTRA = "thread_id";
     public static final String IS_ARCHIVED_EXTRA = "is_archived";
     public static final String TEXT_EXTRA = "draft_text";
     public static final String DISTRIBUTION_TYPE_EXTRA = "distribution_type";
-
+    private static final String TAG = ConversationActivity.class.getSimpleName();
     private static final int PICK_IMAGE = 1;
     private static final int PICK_VIDEO = 2;
     private static final int PICK_AUDIO = 3;
@@ -186,27 +179,25 @@ public class ConversationActivity extends PassphraseRequiredActionBarActivity
     private static final int TAKE_PHOTO = 6;
     private static final int ADD_CONTACT = 7;
     private static final int PICK_LOCATION = 8;
-
-    private MasterSecret masterSecret;
     protected ComposeText composeText;
+    protected ConversationTitleView titleView;
+    protected ReminderView reminderView;
+    protected HidingLinearLayout quickAttachmentToggle;
+    private MasterSecret masterSecret;
     private AnimatingToggle buttonToggle;
     private SendButton sendButton;
     private ImageButton attachButton;
-    protected ConversationTitleView titleView;
     private TextView charactersLeft;
     private ConversationFragment fragment;
     private Button unblockButton;
     private InputAwareLayout container;
     private View composePanel;
-    protected ReminderView reminderView;
-
     private AttachmentTypeSelector attachmentTypeSelector;
     private AttachmentManager attachmentManager;
     private AudioRecorder audioRecorder;
     private BroadcastReceiver securityUpdateReceiver;
     private BroadcastReceiver recipientsStaleReceiver;
     private EmojiDrawer emojiDrawer;
-    protected HidingLinearLayout quickAttachmentToggle;
     private QuickAttachmentDrawer quickAttachmentDrawer;
     private InputPanel inputPanel;
 
@@ -578,11 +569,12 @@ public class ConversationActivity extends PassphraseRequiredActionBarActivity
     private void handleConversationSettings() {
         titleView.performClick();
     }
+
     private void showDelayedMessageList() {
         final Intent intent = new Intent(this, delayed_message_list.class);
         final ThreadDatabase threadDatabase = DatabaseFactory.getThreadDatabase(ConversationActivity.this);
         long threadId = threadDatabase.getThreadIdFor(recipients);
-        intent.putExtra("threadId",threadId);
+        intent.putExtra("threadId", threadId);
         startActivity(intent);
     }
 
@@ -1343,6 +1335,11 @@ public class ConversationActivity extends PassphraseRequiredActionBarActivity
         return this.threadId;
     }
 
+    @Override
+    public void setThreadId(long threadId) {
+        this.threadId = threadId;
+    }
+
     private String getMessage() throws InvalidMessageException {
         String rawText = composeText.getText().toString();
 
@@ -1623,13 +1620,19 @@ public class ConversationActivity extends PassphraseRequiredActionBarActivity
         });
     }
 
+    // Listeners
+
     @Override
     public void onEmojiToggle() {
         if (container.getCurrentInput() == emojiDrawer) container.showSoftkey(composeText);
         else container.show(composeText, emojiDrawer);
     }
 
-    // Listeners
+    @Override
+    public void onAttachmentChanged() {
+        handleSecurityChange(isSecureText, isSecureVoice);
+        updateToggleButtonState();
+    }
 
     private class AttachmentTypeListener implements AttachmentTypeSelector.AttachmentClickedListener {
         @Override
@@ -1729,17 +1732,6 @@ public class ConversationActivity extends PassphraseRequiredActionBarActivity
         @Override
         public void onFocusChange(View v, boolean hasFocus) {
         }
-    }
-
-    @Override
-    public void setThreadId(long threadId) {
-        this.threadId = threadId;
-    }
-
-    @Override
-    public void onAttachmentChanged() {
-        handleSecurityChange(isSecureText, isSecureVoice);
-        updateToggleButtonState();
     }
 
     private class RecipientPreferencesTask extends AsyncTask<Recipients, Void, Pair<Recipients, RecipientsPreferences>> {
