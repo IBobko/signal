@@ -15,6 +15,7 @@ import org.thoughtcrime.securesms.R;
 import org.thoughtcrime.securesms.database.DatabaseFactory;
 import org.thoughtcrime.securesms.database.DelayedMessageDatabase;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -60,7 +61,8 @@ public class sended_delayed_message_list extends BaseActionBarActivity {
 
         for (final DelayedMessageData delayedMessageData : delayedMessage.getMessages()) {
             map = new HashMap<String, String>();
-            map.put("DateTime", "01/10/2016 09:00");
+            map.put("DateTime", DateFormat.getDateInstance().format(delayedMessageData.getDateForSending()));
+            map.put("Recipient", delayedMessageData.getPerson());
             //map.put("DateTime", delayedMessageData.getData());
             map.put("Message", delayedMessageData.getText());
             map.put("ID", delayedMessageData.getId().toString());
