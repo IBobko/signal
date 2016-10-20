@@ -55,7 +55,11 @@ public class DelayedMessageActivity extends BaseActionBarActivity implements OnC
                 final ThreadDatabase threadDatabase = DatabaseFactory.getThreadDatabase(this);
                 final Recipients res = threadDatabase.getRecipientsForThreadId(delayedMessageData.getThreadId());
                 if (res != null && res.getPrimaryRecipient() != null) {
-                    textRecipient.setText(res.getPrimaryRecipient().getName());
+                    if (res.getPrimaryRecipient().getName() != null && !res.getPrimaryRecipient().getName().isEmpty()) {
+                        textRecipient.setText(res.getPrimaryRecipient().getName());
+                    } else {
+                        textRecipient.setText(res.getPrimaryRecipient().getNumber());
+                    }
                 }
             }
         }
