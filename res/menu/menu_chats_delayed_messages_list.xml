@@ -1,16 +1,28 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="ru.innopolis.messagino.ChatsDelayedMessagesListActivity">
-    <item android:title="@string/delete"
-        android:enabled="true"
-        android:icon="@drawable/ic_delete_black"
+    <item
+        android:id="@+id/deleteItem"
         android:checkable="false"
         android:checked="true"
-        android:id="@+id/deleteItem" />
-    <item android:title="@string/title_add_delayed_message"
+        android:enabled="true"
+        android:icon="@drawable/ic_delete_black"
+        android:title="@string/delete"
+        android:visible="false"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/sendToArchive"
+        android:checkable="false"
+        android:checked="true"
+        android:icon="@drawable/ic_archive_white_36dp"
+        android:title="@string/SendToArchive"
+        android:visible="false"
+        app:showAsAction="always" />
+    <item
         android:id="@+id/AddDM"
-        />
-    <item android:title="@string/title_activity_archive"
+        android:title="@string/title_add_delayed_message" />
+    <item
         android:id="@+id/Archive"
-        />
+        android:title="@string/title_activity_archive" />
 </menu>

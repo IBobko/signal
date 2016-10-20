@@ -8,5 +8,6 @@
         android:checkable="false"
         android:checked="true"
         android:id="@+id/deleteItem"
-        android:showAsAction="always" />
+        app:showAsAction="always"
+        android:visible="false" />
 </menu>
