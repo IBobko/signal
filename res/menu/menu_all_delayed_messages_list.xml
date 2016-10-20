@@ -2,5 +2,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="ru.innopolis.messagino.All_delayed_message_list">
-
+    <item android:title="Удалить"
+        android:enabled="true"
+        android:icon="@drawable/ic_delete_black"
+        android:checkable="false"
+        android:checked="true"
+        android:id="@+id/deleteItem"
+        app:showAsAction="always"
+        android:visible="false" />
 </menu>

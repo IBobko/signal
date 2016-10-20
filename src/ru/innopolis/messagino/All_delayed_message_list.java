@@ -18,13 +18,11 @@ import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class All_delayed_message_list extends BaseActionBarActivity {
     private Menu menu;
     private SimpleAdapter adapter;
     private ListView listView;
-    private int currentItemKeyValue;
     private MenuItem deleteButtonItem;
     private List<DelayedMessageData> listOfMessages;
 
@@ -69,32 +67,23 @@ public class All_delayed_message_list extends BaseActionBarActivity {
 
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
-            public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
-                                           int pos, long id) {
-                // TODO Auto-generated method stub
+            public boolean onItemLongClick(AdapterView<?> arg0, View arg1, final int pos, long id) {
                 deleteButtonItem = menu.findItem(R.id.deleteItem);
-
-                currentItemKeyValue = pos;
-
                 deleteButtonItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
-                        myArrList.remove(currentItemKeyValue);
+                        myArrList.remove(pos);
                         adapter.notifyDataSetChanged();
                         return true;
                     }
                 });
-
                 deleteButtonItem.setVisible(true);
-                deleteButtonItem.setShowAsAction(2); //show always
                 listView.setItemChecked(pos, true);
                 arg1.setSelected(true);
-                System.out.println("Set selected item");
                 return true;
             }
         });
 
-        //266013 Send to Edit message preview
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
