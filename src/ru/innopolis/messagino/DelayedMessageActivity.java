@@ -1,6 +1,5 @@
 package ru.innopolis.messagino;
 
-import org.thoughtcrime.securesms.BaseActionBarActivity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
@@ -13,9 +12,12 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import org.thoughtcrime.securesms.BaseActionBarActivity;
 import org.thoughtcrime.securesms.R;
 import org.thoughtcrime.securesms.database.DatabaseFactory;
 import org.thoughtcrime.securesms.database.DelayedMessageDatabase;
+import org.thoughtcrime.securesms.database.ThreadDatabase;
+import org.thoughtcrime.securesms.recipients.Recipients;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -23,53 +25,43 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-
 /**
  * The delayed message card.
  *
  * @author Vyacheslav Stepanov
  */
 public class DelayedMessageActivity extends BaseActionBarActivity implements OnClickListener {
-    final DelayedMessageData delayedMessageData = new DelayedMessageData();
+    private DelayedMessageData delayedMessageData;
     private TextView dateText;
     private TextView timeText;
     private EditText textMessage;
+    private TextView textRecipient;
 
     @Override
     protected void onResume() {
         super.onResume();
         final Intent intent = getIntent();
         if (intent.getExtras() != null) {
-            Bundle ex = intent.getExtras();
-            try {
-                delayedMessageData.setId(Integer.parseInt(ex.getString("MESSAGE_ID")));
-            } catch(NumberFormatException ignore) {}
+            final Bundle ex = intent.getExtras();
+            delayedMessageData = (DelayedMessageData) ex.getSerializable("DelayedMessage");
+            if (delayedMessageData != null) {
+                textMessage.setText(delayedMessageData.getText());
+                final Calendar calendar = delayedMessageData.getDateForSending();
+                if (calendar != null) {
+                    dateText.setText(DateFormat.getDateInstance().format(calendar.getTime()));
+                    timeText.setText(DateFormat.getTimeInstance().format(calendar.getTime()));
+                }
 
-
-            final String text = intent.getExtras().getString("MESSAGE_TEXT");
-
-            if (text!=null) {
-                textMessage.setText(text);
-            } else {
-                textMessage.setText("");
+                final ThreadDatabase threadDatabase = DatabaseFactory.getThreadDatabase(this);
+                final Recipients res = threadDatabase.getRecipientsForThreadId(delayedMessageData.getThreadId());
+                if (res != null && res.getPrimaryRecipient() != null) {
+                    if (res.getPrimaryRecipient().getName() != null && !res.getPrimaryRecipient().getName().isEmpty()) {
+                        textRecipient.setText(res.getPrimaryRecipient().getName());
+                    } else {
+                        textRecipient.setText(res.getPrimaryRecipient().getNumber());
+                    }
+                }
             }
-
-            final String dateTime = intent.getExtras().getString("MESSAGE_TIME");
-            if (dateTime!=null) {
-                dateText.setText(DateFormat.getDateInstance().format(dateTime));
-                timeText.setText(DateFormat.getTimeInstance().format(dateTime));
-            } else {
-                final Calendar cal = Calendar.getInstance();
-                dateText.setText(DateFormat.getDateInstance().format(cal.getTime()));
-                timeText.setText(DateFormat.getTimeInstance().format(cal.getTime()));
-            }
-
-        } else {
-            final Calendar cal = Calendar.getInstance();
-            dateText.setText(DateFormat.getDateInstance().format(cal.getTime()));
-            timeText.setText(DateFormat.getTimeInstance().format(cal.getTime()));
-            textMessage.setText("");
-            delayedMessageData.setDateForSending(cal);
         }
     }
 
@@ -94,6 +86,7 @@ public class DelayedMessageActivity extends BaseActionBarActivity implements OnC
         timeText = (TextView) findViewById(R.id.textTime);
         dateText = (TextView) findViewById(R.id.textDate);
         textMessage = (EditText) findViewById(R.id.textMessage);
+        textRecipient = (TextView) findViewById(R.id.textRecipient);
     }
 
     @Override
@@ -113,14 +106,16 @@ public class DelayedMessageActivity extends BaseActionBarActivity implements OnC
         }
     }
 
-    private void save(View v) {
+    @SuppressWarnings("UnusedParameters")
+    private void save(final View v) {
         final DelayedMessageDatabase delayedMessage = DatabaseFactory.getDelayedMessageDatabase(DelayedMessageActivity.this);
         final String dt = dateText.getText().toString() + " " + timeText.getText().toString();
         final Calendar g = new GregorianCalendar();
         try {
             final Date dtDate = DateFormat.getDateTimeInstance().parse(dt);
             g.setTime(dtDate);
-        } catch (final ParseException ignored) {}
+        } catch (final ParseException ignored) {
+        }
         delayedMessageData.setText(textMessage.getText().toString());
         delayedMessageData.setDateForSending(g);
         delayedMessage.save(delayedMessageData);

@@ -25,14 +25,14 @@ public class DelayedMessageDatabase extends Database {
     public static final String ID          = "_id";
     private static final String DT  = "dt";
     private static final String MESSAGE  = "message";
-    private static final String RECIPIENT = "recipient";
+    private static final String TREAD_ID = "tread_id";
     public static final String STATUS = "status";
     static final String DROP_TABLE = "DROP TABLE " + TABLE_NAME + ";";
 
     private static DateFormat dateFormat = DateFormat.getDateTimeInstance();
 
     public static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + " (" + ID + " INTEGER PRIMARY KEY, " +
-            RECIPIENT + " INTEGER," +
+            TREAD_ID + " INTEGER," +
             DT + " TEXT," +
             STATUS + " INTEGER," +
             MESSAGE + " TEXT);";
@@ -48,14 +48,14 @@ public class DelayedMessageDatabase extends Database {
 
     public List<DelayedMessageData> getMessages() {
         final SQLiteDatabase database = databaseHelper.getReadableDatabase();
-        final Cursor cursor = database.rawQuery("SELECT " + ID + ", " + RECIPIENT + "," + MESSAGE + "," + DT + " FROM " + TABLE_NAME, new String[]{});
+        final Cursor cursor = database.rawQuery("SELECT " + ID + ", " + TREAD_ID + "," + MESSAGE + "," + DT + " FROM " + TABLE_NAME, new String[]{});
         return getByCursor(cursor);
     }
 
     private DelayedMessageData delayedMessageDataFromCursor(final Cursor cursor) {
         final DelayedMessageData delayedMessageData = new DelayedMessageData();
         delayedMessageData.setId(cursor.getInt(0));
-        delayedMessageData.setPerson(cursor.getString(1));
+        delayedMessageData.setThreadId(cursor.getLong(1));
         delayedMessageData.setText(""+cursor.getString(2));
         Calendar calendar = new GregorianCalendar();
         try {
@@ -79,16 +79,17 @@ public class DelayedMessageDatabase extends Database {
         return messageData;
     }
 
-    public  List<DelayedMessageData> getByRecipientAndStatus(final String recipient,final Integer status) {
+    public  List<DelayedMessageData> getByRecipientAndStatus(final long recipient,final int status) {
         final SQLiteDatabase database = databaseHelper.getReadableDatabase();
-        final Cursor cursor = database.rawQuery("SELECT " + ID + ", " + RECIPIENT + "," + MESSAGE + "," + DT + "," + STATUS + " FROM " + TABLE_NAME + " WHERE " + RECIPIENT + " = ?, " + STATUS + "= ?", new String[]{recipient,status.toString()});
+        final Cursor cursor = database.rawQuery("SELECT " + ID + ", " + TREAD_ID + "," + MESSAGE + "," + DT + "," + STATUS + " FROM " + TABLE_NAME + " WHERE " + TREAD_ID + " = ? AND " + STATUS + "= ?", new String[]{""+recipient,""+status});
         return getByCursor(cursor);
     }
 
 
-    public  List<DelayedMessageData> getByRecipient(final String recipient) {
+    @SuppressWarnings("unused")
+    public  List<DelayedMessageData> getByRecipient(final long recipient) {
         final SQLiteDatabase database = databaseHelper.getReadableDatabase();
-        final Cursor cursor = database.rawQuery("SELECT " + ID + ", " + RECIPIENT + "," + MESSAGE + "," + DT + "," + STATUS + " FROM " + TABLE_NAME + " WHERE " + RECIPIENT + " = ?", new String[]{recipient});
+        final Cursor cursor = database.rawQuery("SELECT " + ID + ", " + TREAD_ID + "," + MESSAGE + "," + DT + "," + STATUS + " FROM " + TABLE_NAME + " WHERE " + TREAD_ID + " = ?", new String[]{""+recipient});
         return getByCursor(cursor);
     }
 
@@ -97,6 +98,8 @@ public class DelayedMessageDatabase extends Database {
 
         newValues.put(MESSAGE,delayedMessageData.getText());
         newValues.put(DT,dateFormat.format(delayedMessageData.getDateForSending().getTime()));
+        newValues.put(TREAD_ID,delayedMessageData.getThreadId());
+        newValues.put(STATUS,delayedMessageData.getStatus());
 
         if (delayedMessageData.getId() != null && delayedMessageData.getId() != 0) {
             getDb().update(TABLE_NAME, newValues, ID + " = ?", new String[]{delayedMessageData.getId().toString()});
