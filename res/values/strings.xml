@@ -1175,7 +1175,7 @@
 
     <!-- conversation -->
     <string name="conversation__menu_add_attachment">Add attachment</string>
-    <string name="conversation__menu_add_attachment2">Позднее сообщение</string>
+    <string name="conversation__menu_late_messages">Late message</string>
 
     <string name="conversation__menu_update_group">Update group</string>
     <string name="conversation__menu_leave_group">Leave group</string>
