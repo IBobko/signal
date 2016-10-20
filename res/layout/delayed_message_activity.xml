@@ -103,7 +103,7 @@
         android:background="?android:attr/listDivider"/>
 
     <Button
-        android:text="send"
+        android:text="@string/plan_message"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/btnSend"

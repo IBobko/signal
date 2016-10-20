@@ -1278,6 +1278,7 @@
     <string name="title_add_delayed_message">Add delayed message</string>
     <string name="SendToArchive">Send to archive</string>
     <string name="edit_delayed_message">Add / edit delayed message</string>
+    <string name="plan_message">Plan message</string>
     <!-- EOF -->
 
 </resources>
