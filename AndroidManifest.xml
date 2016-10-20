@@ -242,7 +242,7 @@
         <activity
             android:name="ru.innopolis.messagino.DelayedMessageActivity"
             android:configChanges="touchscreen|keyboard|keyboardHidden|orientation|screenLayout|screenSize"
-            android:label="Delayed Message"
+            android:label="@string/edit_delayed_message"
             android:launchMode="singleTask"
             android:windowSoftInputMode="stateVisible" />
         <activity

@@ -20,9 +20,6 @@
         android:visible="false"
         app:showAsAction="always" />
     <item
-        android:id="@+id/AddDM"
-        android:title="@string/title_add_delayed_message" />
-    <item
         android:id="@+id/Archive"
         android:title="@string/title_activity_archive" />
 </menu>

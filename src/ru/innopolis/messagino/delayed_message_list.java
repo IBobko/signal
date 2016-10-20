@@ -2,6 +2,7 @@ package ru.innopolis.messagino;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -32,7 +33,6 @@ public class delayed_message_list extends BaseActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_delayed_message_list);
         delayed_message_list.this.setTitle(R.string.title_activity_delayed_messages);
     }
 
@@ -40,19 +40,7 @@ public class delayed_message_list extends BaseActionBarActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         delayed_message_list.this.menu = menu;
         getMenuInflater().inflate(R.menu.menu_chats_delayed_messages_list, menu);
-        MenuItem addButtonItem = menu.findItem(R.id.AddDM);
 
-        addButtonItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                final Intent myIntent = new Intent(delayed_message_list.this, DelayedMessageActivity.class);
-                final DelayedMessageData dmd = new DelayedMessageData();
-                dmd.setThreadId(threadId);
-                myIntent.putExtra("DelayedMessage", dmd);
-                delayed_message_list.this.startActivity(myIntent);
-                return true;
-            }
-        });
         MenuItem archiveButton = menu.findItem(R.id.Archive);
         archiveButton.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
@@ -64,7 +52,6 @@ public class delayed_message_list extends BaseActionBarActivity {
                 return true;
             }
         });
-        addButtonItem.setVisible(status == 0);
         archiveButton.setVisible(status == 0);
 
         return true;
@@ -148,7 +135,23 @@ public class delayed_message_list extends BaseActionBarActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 DelayedMessageData dmd = listOfMessages.get(position);
                 Intent myIntent = new Intent(delayed_message_list.this, DelayedMessageActivity.class);
-                myIntent.putExtra("DelayedMessage", dmd); //Optional parameters
+                myIntent.putExtra("DelayedMessage", dmd);
+                delayed_message_list.this.startActivity(myIntent);
+            }
+        });
+
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        if (status == 0)fab.show();
+        else fab.hide();
+
+
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final Intent myIntent = new Intent(delayed_message_list.this, DelayedMessageActivity.class);
+                final DelayedMessageData dmd = new DelayedMessageData();
+                dmd.setThreadId(threadId);
+                myIntent.putExtra("DelayedMessage", dmd);
                 delayed_message_list.this.startActivity(myIntent);
             }
         });

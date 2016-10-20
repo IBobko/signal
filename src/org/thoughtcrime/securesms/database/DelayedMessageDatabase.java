@@ -48,7 +48,7 @@ public class DelayedMessageDatabase extends Database {
 
     public List<DelayedMessageData> getMessages() {
         final SQLiteDatabase database = databaseHelper.getReadableDatabase();
-        final Cursor cursor = database.rawQuery("SELECT " + ID + ", " + TREAD_ID + "," + MESSAGE + "," + DT + " FROM " + TABLE_NAME, new String[]{});
+        final Cursor cursor = database.rawQuery("SELECT " + ID + ", " + TREAD_ID + "," + MESSAGE + "," + DT + "," + STATUS + " FROM " + TABLE_NAME, new String[]{});
         return getByCursor(cursor);
     }
 
