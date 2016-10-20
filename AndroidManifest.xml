@@ -569,11 +569,6 @@
             android:label="@string/title_activity_all_delayed_messages_list"
             android:theme="@style/TextSecure.LightTheme">
         </activity>
-        <activity
-            android:name="ru.innopolis.messagino.sended_delayed_message_list"
-            android:label="@string/title_activity_sended_delayed_messages_list"
-            android:theme="@style/TextSecure.LightTheme">
-        </activity>
     </application>
 
 </manifest>

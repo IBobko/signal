@@ -25,11 +25,8 @@ public class delayed_message_list extends BaseActionBarActivity {
     private ListView listView;
     private int currentItemKeyValue;
     private MenuItem deleteButtonItem;
-    private MenuItem addButtonItem;
-    private MenuItem archiveButton;
     private List<DelayedMessageData> listOfMessages;
     private long threadId;
-    private int status = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +39,7 @@ public class delayed_message_list extends BaseActionBarActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         delayed_message_list.this.menu = menu;
         getMenuInflater().inflate(R.menu.menu_chats_delayed_messages_list, menu);
-        addButtonItem = menu.findItem(R.id.AddDM);
+        MenuItem addButtonItem = menu.findItem(R.id.AddDM);
 
         addButtonItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
@@ -55,7 +52,7 @@ public class delayed_message_list extends BaseActionBarActivity {
                 return true;
             }
         });
-        archiveButton = menu.findItem(R.id.Archive);
+        MenuItem archiveButton = menu.findItem(R.id.Archive);
         archiveButton.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
@@ -84,7 +81,7 @@ public class delayed_message_list extends BaseActionBarActivity {
 
         final Bundle extras = intent.getExtras();
         threadId = extras.getLong("threadId");
-        status = extras.getInt("status",0);
+        int status = extras.getInt("status",0);
 
         final DelayedMessageDatabase delayedMessage = DatabaseFactory.getDelayedMessageDatabase(delayed_message_list.this);
         listOfMessages = delayedMessage.getByRecipientAndStatus(threadId,status);
