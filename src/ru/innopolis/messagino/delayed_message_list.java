@@ -27,6 +27,7 @@ public class delayed_message_list extends BaseActionBarActivity {
     private MenuItem deleteButtonItem;
     private List<DelayedMessageData> listOfMessages;
     private long threadId;
+    private int status = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +64,9 @@ public class delayed_message_list extends BaseActionBarActivity {
                 return true;
             }
         });
+        addButtonItem.setVisible(status == 0);
+        archiveButton.setVisible(status == 0);
+
         return true;
     }
 
@@ -81,7 +85,7 @@ public class delayed_message_list extends BaseActionBarActivity {
 
         final Bundle extras = intent.getExtras();
         threadId = extras.getLong("threadId");
-        int status = extras.getInt("status",0);
+        status = extras.getInt("status",0);
 
         final DelayedMessageDatabase delayedMessage = DatabaseFactory.getDelayedMessageDatabase(delayed_message_list.this);
         listOfMessages = delayedMessage.getByRecipientAndStatus(threadId,status);
@@ -100,8 +104,7 @@ public class delayed_message_list extends BaseActionBarActivity {
 
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
-            public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
-                                           int pos, long id) {
+            public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int pos, long id) {
                 currentItemKeyValue = pos;
                 deleteButtonItem = menu.findItem(R.id.deleteItem);
                 deleteButtonItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
