@@ -579,8 +579,10 @@ public class ConversationActivity extends PassphraseRequiredActionBarActivity
         titleView.performClick();
     }
     private void showDelayedMessageList() {
-        Intent intent = new Intent(this, delayed_message_list.class);
-        Global.recipients = recipients;
+        final Intent intent = new Intent(this, delayed_message_list.class);
+        final ThreadDatabase threadDatabase = DatabaseFactory.getThreadDatabase(ConversationActivity.this);
+        long threadId = threadDatabase.getThreadIdFor(recipients);
+        intent.putExtra("threadId",threadId);
         startActivity(intent);
     }
 
@@ -1246,6 +1248,7 @@ public class ConversationActivity extends PassphraseRequiredActionBarActivity
                 if (drafts.size() > 0) {
                     if (threadId == -1)
                         threadId = threadDatabase.getThreadIdFor(getRecipients(), thisDistributionType);
+
 
                     draftDatabase.insertDrafts(new MasterCipher(thisMasterSecret), threadId, drafts);
                     threadDatabase.updateSnippet(threadId, drafts.getSnippet(ConversationActivity.this),
