@@ -17,52 +17,26 @@ import org.thoughtcrime.securesms.database.DelayedMessageDatabase;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
+import java.util.Map;
 
-public class delayed_message_list extends BaseActionBarActivity {
+public class All_delayed_message_list extends BaseActionBarActivity {
     private Menu menu;
     private SimpleAdapter adapter;
     private ListView listView;
     private int currentItemKeyValue;
     private MenuItem deleteButtonItem;
-    private List<DelayedMessageData> listOfMessages;
-    private long threadId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_delayed_message_list);
-        delayed_message_list.this.setTitle(R.string.title_activity_delayed_messages);
+        setContentView(R.layout.activity_all_delayed_message_list);
+        All_delayed_message_list.this.setTitle("Запланированные сообщения");
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        delayed_message_list.this.menu = menu;
-        getMenuInflater().inflate(R.menu.menu_chats_delayed_messages_list, menu);
-        MenuItem addButtonItem = menu.findItem(R.id.AddDM);
-
-        addButtonItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                final Intent myIntent = new Intent(delayed_message_list.this, DelayedMessageActivity.class);
-                final DelayedMessageData dmd = new DelayedMessageData();
-                dmd.setThreadId(threadId);
-                myIntent.putExtra("DelayedMessage", dmd);
-                delayed_message_list.this.startActivity(myIntent);
-                return true;
-            }
-        });
-        MenuItem archiveButton = menu.findItem(R.id.Archive);
-        archiveButton.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                Intent myIntent = new Intent(delayed_message_list.this, delayed_message_list.class);
-                myIntent.putExtra("threadId", threadId);
-                myIntent.putExtra("status", 1);
-                startActivity(myIntent);
-                return true;
-            }
-        });
+        All_delayed_message_list.this.menu = menu;
+        getMenuInflater().inflate(R.menu.menu_all_delayed_messages_list, menu);
         return true;
     }
 
@@ -70,22 +44,15 @@ public class delayed_message_list extends BaseActionBarActivity {
     protected void onResume() {
         super.onResume();
 
-        setContentView(R.layout.activity_delayed_messages_list);
-        listView = (ListView) findViewById(R.id.delayedMessagesList);
+        setContentView(R.layout.activity_all_delayed_message_list);
+        listView = (ListView) findViewById(R.id.alldelayedMessagesList);
         listView.setLongClickable(true);
         listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-
         final ArrayList<HashMap<String, String>> myArrList = new ArrayList<>();
 
-        Intent intent = getIntent();
+        final DelayedMessageDatabase delayedMessage = DatabaseFactory.getDelayedMessageDatabase(All_delayed_message_list.this);
 
-        final Bundle extras = intent.getExtras();
-        threadId = extras.getLong("threadId");
-        int status = extras.getInt("status",0);
-
-        final DelayedMessageDatabase delayedMessage = DatabaseFactory.getDelayedMessageDatabase(delayed_message_list.this);
-        listOfMessages = delayedMessage.getByRecipientAndStatus(threadId,status);
-        for (final DelayedMessageData delayedMessageData : listOfMessages) {
+        for (final DelayedMessageData delayedMessageData : delayedMessage.getMessages()) {
             final HashMap<String, String> map = new HashMap<>();
             map.put("DateTime", DateFormat.getDateTimeInstance().format(delayedMessageData.getDateForSending().getTime()));
             map.put("Message", delayedMessageData.getText());
@@ -102,16 +69,16 @@ public class delayed_message_list extends BaseActionBarActivity {
             @Override
             public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
                                            int pos, long id) {
-                currentItemKeyValue = pos;
+                // TODO Auto-generated method stub
                 deleteButtonItem = menu.findItem(R.id.deleteItem);
+
+                currentItemKeyValue = pos;
+
                 deleteButtonItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
-                        Integer id = Integer.parseInt(myArrList.get(currentItemKeyValue).get("ID"));
                         myArrList.remove(currentItemKeyValue);
                         adapter.notifyDataSetChanged();
-                        final DelayedMessageDatabase delayedMessage = DatabaseFactory.getDelayedMessageDatabase(delayed_message_list.this);
-                        delayedMessage.delete(id);
                         return true;
                     }
                 });
@@ -125,14 +92,19 @@ public class delayed_message_list extends BaseActionBarActivity {
             }
         });
 
+        //266013 Send to Edit message preview
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                DelayedMessageData dmd = listOfMessages.get(position);
-                Intent myIntent = new Intent(delayed_message_list.this, DelayedMessageActivity.class);
-                myIntent.putExtra("DelayedMessage", dmd); //Optional parameters
-                delayed_message_list.this.startActivity(myIntent);
+                Map row = (Map) listView.getAdapter().getItem(position);
+                Intent myIntent = new Intent(All_delayed_message_list.this, DelayedMessageActivity.class);
+                myIntent.putExtra("MESSAGE_ID", (String) row.get("ID")); //Optional parameters
+                myIntent.putExtra("MESSAGE_TEXT", (String) row.get("Message")); //Optional parameters
+                All_delayed_message_list.this.startActivity(myIntent);
             }
         });
     }
+
+
+
 }

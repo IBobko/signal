@@ -1027,6 +1027,7 @@ SMS-подтверждения...
   <string name="conversation_unmuted__mute_notifications">Откл. звук уведомлений</string>
   <!--conversation-->
   <string name="conversation__menu_add_attachment">Добавить вложение</string>
+  <string name="conversation__menu_late_messages">Позднее сообщение</string>
   <string name="conversation__menu_update_group">Обновить группу</string>
   <string name="conversation__menu_leave_group">Покинуть группу</string>
   <string name="conversation__menu_delete_thread">Удалить разговор</string>
@@ -1103,5 +1104,18 @@ SMS-подтверждения...
   <string name="trimmer__old_messages_successfully_deleted">Старые сообщения успешно удалены</string>
   <!--transport_selection_list_item-->
   <string name="transport_selection_list_item__transport_icon">Иконка транспорта</string>
+
+  <string name="conversation__menu_groups">Группы</string>
+  <string name="action_settings">Настройки действий</string>
+  <string name="planned_messages_title">Отложенные сообщения</string>
+
+  <string name="title_activity_delayed_message_list">Отложенное сообщение</string>
+
+  <string name="title_activity_delayed_messages_list">Отложенные сообщения</string>
+  <string name="title_activity_sended_delayed_messages_list">Отправленные сообщения</string>
+  <string name="title_activity_all_delayed_messages_list" >Все отложенные сообщения</string>
+  <string name="title_activity_delayed_messages">Отложенные сообщения</string>
+  <string name="title_activity_archive">Архив</string>
+  <string name="title_add_delayed_message">Добавить отложенное сообщ.</string>
   <!--EOF-->
 </resources>

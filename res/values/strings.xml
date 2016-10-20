@@ -967,6 +967,7 @@
 
     <!-- arrays.xml -->
     <string name="arrays__import_export">Import / export</string>
+    <string name="arrays__show_all_delayed_messages">Show all delayed messages</string>
     <string name="arrays__your_identity_key">Your identity key</string>
     <string name="arrays__use_default">Use default</string>
     <string name="arrays__use_custom">Use custom</string>
@@ -1174,7 +1175,7 @@
 
     <!-- conversation -->
     <string name="conversation__menu_add_attachment">Add attachment</string>
-    <string name="conversation__menu_add_attachment2">Позднее сообщение</string>
+    <string name="conversation__menu_late_messages">Late message</string>
 
     <string name="conversation__menu_update_group">Update group</string>
     <string name="conversation__menu_leave_group">Leave group</string>
@@ -1263,12 +1264,18 @@
 
     <!-- transport_selection_list_item -->
     <string name="transport_selection_list_item__transport_icon">Transport icon</string>
-    <string name="conversation__menu_groups" >Groups</string>
-    <string name="action_settings" >Action Serrings</string>
+    <string name="conversation__menu_groups">Groups</string>
+    <string name="action_settings" >Action Settings</string>
+    <string name="planned_messages_title">Planned_messages</string>
 
-    <string name="title_activity_delayed_message_list" >Action Serrings</string>
+    <string name="title_activity_delayed_message_list" >Action Settings</string>
 
-    <string name="title_activity_delayed_messages_list" >Action Serrings</string>
+    <string name="title_activity_delayed_messages_list" >Scheduled messages</string>
+    <string name="title_activity_sended_delayed_messages_list" >Sended messages</string>
+    <string name="title_activity_all_delayed_messages_list" >All planned messages</string>
+    <string name="title_activity_delayed_messages">Planned messages</string>
+    <string name="title_activity_archive">Archive</string>
+    <string name="title_add_delayed_message">Add delayed message</string>
     <!-- EOF -->
 
 </resources>
