@@ -1274,6 +1274,8 @@
     <string name="title_activity_sended_delayed_messages_list">Sended messages</string>
     <string name="title_activity_all_delayed_messages_list">All planned messages</string>
     <string name="title_activity_delayed_messages">Planned messages</string>
+    <string name="title_activity_archive">Archive</string>
+    <string name="title_add_delayed_message">Add delayed message</string>
     <!-- EOF -->
 
 </resources>
