@@ -12,6 +12,14 @@
         android:visible="false"
         app:showAsAction="always" />
     <item
+        android:id="@+id/sendToArchive"
+        android:checkable="false"
+        android:checked="true"
+        android:icon="@drawable/ic_archive_white_36dp"
+        android:title="@string/SendToArchive"
+        android:visible="false"
+        app:showAsAction="always" />
+    <item
         android:id="@+id/AddDM"
         android:title="@string/title_add_delayed_message" />
     <item

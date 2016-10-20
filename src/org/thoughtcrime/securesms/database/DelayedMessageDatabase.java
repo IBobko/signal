@@ -65,6 +65,7 @@ public class DelayedMessageDatabase extends Database {
             e.printStackTrace();
         }
         delayedMessageData.setDateForSending(calendar);
+        delayedMessageData.setStatus(cursor.getInt(4));
         return delayedMessageData;
     }
 
@@ -111,6 +112,12 @@ public class DelayedMessageDatabase extends Database {
     public void delete(final Integer id) {
         if (id == null) return;
         getDb().delete(TABLE_NAME,ID + " = ?", new String[]{id.toString()});
+    }
+
+    public void updateStatus(int messageId, int status) {
+        final ContentValues newValues = new ContentValues();
+        newValues.put(STATUS,status);
+        getDb().update(TABLE_NAME, newValues, ID + " = ?", new String[]{"" + messageId });
     }
 
 }

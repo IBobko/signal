@@ -1276,6 +1276,7 @@
     <string name="title_activity_delayed_messages">Planned messages</string>
     <string name="title_activity_archive">Archive</string>
     <string name="title_add_delayed_message">Add delayed message</string>
+    <string name="SendToArchive">Send to archive</string>
     <!-- EOF -->
 
 </resources>

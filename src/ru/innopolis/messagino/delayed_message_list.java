@@ -23,8 +23,8 @@ public class delayed_message_list extends BaseActionBarActivity {
     private Menu menu;
     private SimpleAdapter adapter;
     private ListView listView;
-    private int currentItemKeyValue;
     private MenuItem deleteButtonItem;
+    private MenuItem sendToArchiveItem;
     private List<DelayedMessageData> listOfMessages;
     private long threadId;
     private int status = 0;
@@ -104,14 +104,14 @@ public class delayed_message_list extends BaseActionBarActivity {
 
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
-            public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int pos, long id) {
-                currentItemKeyValue = pos;
+            public boolean onItemLongClick(AdapterView<?> arg0, View arg1, final int pos, long id) {
+
                 deleteButtonItem = menu.findItem(R.id.deleteItem);
                 deleteButtonItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
-                        Integer id = Integer.parseInt(myArrList.get(currentItemKeyValue).get("ID"));
-                        myArrList.remove(currentItemKeyValue);
+                        Integer id = Integer.parseInt(myArrList.get(pos).get("ID"));
+                        myArrList.remove(pos);
                         adapter.notifyDataSetChanged();
                         final DelayedMessageDatabase delayedMessage = DatabaseFactory.getDelayedMessageDatabase(delayed_message_list.this);
                         delayedMessage.delete(id);
@@ -120,10 +120,25 @@ public class delayed_message_list extends BaseActionBarActivity {
                 });
 
                 deleteButtonItem.setVisible(true);
-                deleteButtonItem.setShowAsAction(2); //show always
                 listView.setItemChecked(pos, true);
                 arg1.setSelected(true);
-                System.out.println("Set selected item");
+
+                sendToArchiveItem = menu.findItem(R.id.sendToArchive);
+                sendToArchiveItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        Integer id = Integer.parseInt(myArrList.get(pos).get("ID"));
+                        myArrList.remove(pos);
+                        adapter.notifyDataSetChanged();
+                        final DelayedMessageDatabase delayedMessage = DatabaseFactory.getDelayedMessageDatabase(delayed_message_list.this);
+                        delayedMessage.updateStatus(id,1);
+                        return true;
+                    }
+                });
+
+                sendToArchiveItem.setVisible(true);
+                listView.setItemChecked(pos, true);
+                arg1.setSelected(true);
                 return true;
             }
         });
