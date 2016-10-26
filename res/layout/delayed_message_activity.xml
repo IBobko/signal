@@ -14,7 +14,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:text="To: "
-            android:textSize="22sp"
+            android:textSize="16sp"
             android:gravity="start|center_vertical">
         </TextView>
         <TextView
@@ -22,7 +22,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="start|center_vertical"
-            android:textSize="22sp"
+            android:textSize="16sp"
             android:layout_weight="1">
         </TextView>
     </LinearLayout>
@@ -39,14 +39,14 @@
             android:layout_height="match_parent"
             android:gravity="start|center_vertical"
             android:text="Date: "
-            android:textSize="22sp">
+            android:textSize="16sp">
         </TextView>
         <TextView
                 android:id="@+id/textDate"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="start|center_vertical"
-                android:textSize="22sp"
+                android:textSize="16sp"
             android:layout_weight="1">
             </TextView>
         <Button
@@ -69,14 +69,14 @@
             android:layout_height="match_parent"
             android:text="Time:"
             android:gravity="start|center_vertical"
-            android:textSize="22sp">
+            android:textSize="16sp">
         </TextView>
         <TextView
                 android:id="@+id/textTime"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
             android:gravity="start|center_vertical"
-                android:textSize="22sp"
+                android:textSize="16sp"
             android:layout_weight="1">
             </TextView>
 
@@ -95,6 +95,7 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:inputType="textMultiLine"
+        android:textSize="16sp"
         android:ems="10"
         android:id="@+id/textMessage"
         android:gravity="top|left" />
