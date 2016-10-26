@@ -1,6 +1,8 @@
 package ru.innopolis.messagino;
 
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -13,6 +15,7 @@ import org.thoughtcrime.securesms.BaseActionBarActivity;
 import org.thoughtcrime.securesms.R;
 import org.thoughtcrime.securesms.database.DatabaseFactory;
 import org.thoughtcrime.securesms.database.DelayedMessageDatabase;
+import org.thoughtcrime.securesms.database.ThreadDatabase;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
@@ -20,6 +23,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class delayed_message_list extends BaseActionBarActivity {
+    public static final String THREAD_ID_EXTRA = "thread_id";
+
     private Menu menu;
     private SimpleAdapter adapter;
     private ListView listView;
@@ -27,14 +32,18 @@ public class delayed_message_list extends BaseActionBarActivity {
     private MenuItem deleteButtonItem;
     private MenuItem addButtonItem;
     private MenuItem archiveButton;
+    private long threadId;
+
     private ArrayList<HashMap<String, String>> myArrList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_delayed_message_list);
-
+        threadId = getIntent().getLongExtra(THREAD_ID_EXTRA, -1);
     }
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -108,14 +117,18 @@ public class delayed_message_list extends BaseActionBarActivity {
                         adapter.notifyDataSetChanged();
                         final DelayedMessageDatabase delayedMessage = DatabaseFactory.getDelayedMessageDatabase(delayed_message_list.this);
                         delayedMessage.delete(id);
+                        deleteButtonItem.setVisible(false);
                         return true;
                     }
                 });
 
-                deleteButtonItem.setVisible(true);
+
                 deleteButtonItem.setShowAsAction(2); //show always
+                deleteButtonItem.setVisible(true);
                 listView.setItemChecked(pos, true);
                 arg1.setSelected(true);
+
+                //ThreadDatabase threadDatabase = DatabaseFactory.getThreadDatabase();
                 System.out.println("Set selected item");
                 return true;
             }
