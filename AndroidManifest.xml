@@ -561,7 +561,11 @@
         <activity
             android:name="ru.innopolis.messagino.delayed_message_list"
             android:label="@string/title_activity_delayed_message_list"
-            android:theme="@style/TextSecure.LightTheme">
+            android:theme="@style/TextSecure.LightTheme"
+            android:parentActivityName=".ConversationActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ConversationActivity" />
         </activity>
 
         <activity
@@ -570,5 +574,4 @@
             android:theme="@style/TextSecure.LightTheme">
         </activity>
     </application>
-
 </manifest>
