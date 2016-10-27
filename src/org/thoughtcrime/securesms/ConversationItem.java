@@ -137,40 +137,39 @@ public class ConversationItem extends LinearLayout
 
   @Override
   protected void onFinishInflate() {
-//    super.onFinishInflate();
-//
-//    initializeAttributes();
-//
-//    this.bodyText                = (TextView)           findViewById(R.id.conversation_item_body);
-//    this.dateText                = (TextView)           findViewById(R.id.conversation_item_date);
-//    this.simInfoText             = (TextView)           findViewById(R.id.sim_info);
-//    this.indicatorText           = (TextView)           findViewById(R.id.indicator_text);
-//    this.groupStatusText         = (TextView)           findViewById(R.id.group_message_status);
-//    this.secureImage             = (ImageView)          findViewById(R.id.secure_indicator);
-//    this.deliveryStatusIndicator = (DeliveryStatusView) findViewById(R.id.delivery_status);
-//    this.alertView               = (AlertView)          findViewById(R.id.indicators_parent);
-//    this.mmsDownloadButton       = (Button)             findViewById(R.id.mms_download_button);
-//    this.mmsDownloadingLabel     = (TextView)           findViewById(R.id.mms_label_downloading);
-//    this.contactPhoto            = (AvatarImageView)    findViewById(R.id.contact_photo);
-//    this.bodyBubble              =                      findViewById(R.id.body_bubble);
-//    this.mediaThumbnail          = (ThumbnailView)      findViewById(R.id.image_view);
-//    this.audioView               = (AudioView)          findViewById(R.id.audio_view);
-//    this.expirationTimer         = (ExpirationTimerView) findViewById(R.id.expiration_indicator);
-//
-//    setOnClickListener(new ClickListener(null));
-//    PassthroughClickListener        passthroughClickListener = new PassthroughClickListener();
-//    AttachmentDownloadClickListener downloadClickListener    = new AttachmentDownloadClickListener();
-//
-//    mmsDownloadButton.setOnClickListener(mmsDownloadClickListener);
-//    mediaThumbnail.setThumbnailClickListener(new ThumbnailClickListener());
-//    mediaThumbnail.setDownloadClickListener(downloadClickListener);
-//    mediaThumbnail.setOnLongClickListener(passthroughClickListener);
-//    mediaThumbnail.setOnClickListener(passthroughClickListener);
-//    audioView.setDownloadClickListener(downloadClickListener);
-//    audioView.setOnLongClickListener(passthroughClickListener);
-//    bodyText.setOnLongClickListener(passthroughClickListener);
-//    bodyText.setOnClickListener(passthroughClickListener);
-  }
+    super.onFinishInflate();
+
+    initializeAttributes();
+
+    this.bodyText                = (TextView)           findViewById(R.id.conversation_item_body);
+    this.dateText                = (TextView)           findViewById(R.id.conversation_item_date);
+    this.simInfoText             = (TextView)           findViewById(R.id.sim_info);
+    this.indicatorText           = (TextView)           findViewById(R.id.indicator_text);
+    this.groupStatusText         = (TextView)           findViewById(R.id.group_message_status);
+    this.secureImage             = (ImageView)          findViewById(R.id.secure_indicator);
+    this.deliveryStatusIndicator = (DeliveryStatusView) findViewById(R.id.delivery_status);
+    this.alertView               = (AlertView)          findViewById(R.id.indicators_parent);
+    this.mmsDownloadButton       = (Button)             findViewById(R.id.mms_download_button);
+    this.mmsDownloadingLabel     = (TextView)           findViewById(R.id.mms_label_downloading);
+    this.contactPhoto            = (AvatarImageView)    findViewById(R.id.contact_photo);
+    this.bodyBubble              =                      findViewById(R.id.body_bubble);
+    this.mediaThumbnail          = (ThumbnailView)      findViewById(R.id.image_view);
+    this.audioView               = (AudioView)          findViewById(R.id.audio_view);
+    this.expirationTimer         = (ExpirationTimerView) findViewById(R.id.expiration_indicator);
+
+    setOnClickListener(new ClickListener(null));
+    PassthroughClickListener        passthroughClickListener = new PassthroughClickListener();
+    AttachmentDownloadClickListener downloadClickListener    = new AttachmentDownloadClickListener();
+
+    mmsDownloadButton.setOnClickListener(mmsDownloadClickListener);
+    mediaThumbnail.setThumbnailClickListener(new ThumbnailClickListener());
+    mediaThumbnail.setDownloadClickListener(downloadClickListener);
+    mediaThumbnail.setOnLongClickListener(passthroughClickListener);
+    mediaThumbnail.setOnClickListener(passthroughClickListener);
+    audioView.setDownloadClickListener(downloadClickListener);
+    audioView.setOnLongClickListener(passthroughClickListener);
+    bodyText.setOnLongClickListener(passthroughClickListener);
+    bodyText.setOnClickListener(passthroughClickListener);  }
 
   @Override
   public void bind(@NonNull MasterSecret       masterSecret,
