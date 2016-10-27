@@ -4,6 +4,8 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -36,6 +38,8 @@ public class DelayedMessageActivity extends BaseActionBarActivity implements OnC
     private TextView timeText;
     private EditText textMessage;
     private TextView textRecipient;
+    private Menu menu;
+    //private MenuItem scheduleButtonItem;
 
     @Override
     protected void onResume() {
@@ -63,6 +67,7 @@ public class DelayedMessageActivity extends BaseActionBarActivity implements OnC
                 }
             }
         }
+
     }
 
     /**
@@ -79,9 +84,7 @@ public class DelayedMessageActivity extends BaseActionBarActivity implements OnC
         Button btnDate = (Button) findViewById(R.id.btnDate);
         btnDate.setOnClickListener(this);
 
-        Button btnSend = (Button) findViewById(R.id.btnSend);
 
-        btnSend.setOnClickListener(this);
 
         timeText = (TextView) findViewById(R.id.textTime);
         dateText = (TextView) findViewById(R.id.textDate);
@@ -98,16 +101,27 @@ public class DelayedMessageActivity extends BaseActionBarActivity implements OnC
             case R.id.btnDate:
                 showDatePickerDialog(v);
                 break;
-            case R.id.btnSend:
-                save(v);
-                break;
             default:
                 break;
         }
     }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        DelayedMessageActivity.this.menu = menu;
+        getMenuInflater().inflate(R.menu.menu_delayed_messages, menu);
 
+        MenuItem scheduleButtonItem = (MenuItem) menu.findItem(R.id.scheduleItem2);
+        scheduleButtonItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                save();
+                return true;
+            }
+        });
+        return true;
+    }
     @SuppressWarnings("UnusedParameters")
-    private void save(final View v) {
+    private void save() {
         final DelayedMessageDatabase delayedMessage = DatabaseFactory.getDelayedMessageDatabase(DelayedMessageActivity.this);
         final String dt = dateText.getText().toString() + " " + timeText.getText().toString();
         final Calendar g = new GregorianCalendar();
