@@ -99,14 +99,4 @@
         android:ems="10"
         android:id="@+id/textMessage"
         android:gravity="top|left" />
-    <LinearLayout android:layout_height="1dp"
-        android:layout_width="match_parent"
-        android:background="?android:attr/listDivider"/>
-
-    <Button
-        android:text="@string/plan_message"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/btnSend"
-        android:gravity="center_vertical|center_horizontal" />
 </LinearLayout>

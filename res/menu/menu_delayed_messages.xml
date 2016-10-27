@@ -1,11 +1,15 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
-    <item android:title="Item"
-        android:icon="@drawable/ic_delete_black"
-        android:showAsAction="always"
-        android:visible="true"
-        android:enabled="true"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="ru.innopolis.messagino.DelayedMessageActivity">>
+    <item
+        android:id="@+id/scheduleItem2"
         android:checkable="false"
-        android:menuCategory="container" />
+        android:checked="true"
+        android:enabled="true"
+        android:icon="@drawable/ic_done_white_18dp"
+        android:title="@string/delete"
+        android:visible="true"
+        app:showAsAction="always" />
 </menu>
 
