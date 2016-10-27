@@ -30,7 +30,7 @@ public class All_delayed_message_list extends BaseActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_all_delayed_message_list);
-        setTitle("Запланированные сообщения");
+        setTitle(R.string.all_planned_messages);
     }
 
     @Override

@@ -160,24 +160,24 @@ public class RegistrationService extends Service {
     String password     = intent.getStringExtra("password");
     String signalingKey = intent.getStringExtra("signaling_key");
 
-   // try {
+    try {
       SignalServiceAccountManager accountManager = TextSecureCommunicationFactory.createManager(this, number, password);
 
-//      handleCommonRegistration(accountManager, number, password, signalingKey);
+      handleCommonRegistration(accountManager, number, password, signalingKey);
 
       markAsVerified(number, password, signalingKey);
 
       setState(new RegistrationState(RegistrationState.STATE_COMPLETE, number));
       broadcastComplete(true);
-    //} catch (UnsupportedOperationException uoe) {
-      //Log.w("RegistrationService", uoe);
-      //setState(new RegistrationState(RegistrationState.STATE_GCM_UNSUPPORTED, number));
-      //broadcastComplete(false);
-    //} catch (IOException e) {
-    //  Log.w("RegistrationService", e);
-    //  setState(new RegistrationState(RegistrationState.STATE_NETWORK_ERROR, number));
-    //  broadcastComplete(false);
-    //}
+    } catch (UnsupportedOperationException uoe) {
+      Log.w("RegistrationService", uoe);
+      setState(new RegistrationState(RegistrationState.STATE_GCM_UNSUPPORTED, number));
+      broadcastComplete(false);
+    } catch (IOException e) {
+      Log.w("RegistrationService", e);
+      setState(new RegistrationState(RegistrationState.STATE_NETWORK_ERROR, number));
+      broadcastComplete(false);
+    }
   }
 
   private void handleSmsRegistrationIntent(Intent intent) {

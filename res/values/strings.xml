@@ -1175,7 +1175,7 @@
 
     <!-- conversation -->
     <string name="conversation__menu_add_attachment">Add attachment</string>
-    <string name="conversation__menu_late_messages">Late message</string>
+    <string name="conversation__menu_late_messages">Planned message</string>
 
     <string name="conversation__menu_update_group">Update group</string>
     <string name="conversation__menu_leave_group">Leave group</string>
@@ -1270,15 +1270,16 @@
 
     <string name="title_activity_delayed_message_list" >Action Settings</string>
 
-    <string name="title_activity_delayed_messages_list" >Scheduled messages</string>
+    <string name="title_activity_delayed_messages_list" >Planned messages</string>
     <string name="title_activity_sended_delayed_messages_list" >Sended messages</string>
     <string name="title_activity_all_delayed_messages_list" >All planned messages</string>
     <string name="title_activity_delayed_messages">Planned messages</string>
     <string name="title_activity_archive">Archive</string>
-    <string name="title_add_delayed_message">Add delayed message</string>
+    <string name="title_add_delayed_message">Add planned message</string>
     <string name="SendToArchive">Send to archive</string>
-    <string name="edit_delayed_message">Add / edit delayed message</string>
+    <string name="edit_delayed_message">Add / edit planned message</string>
     <string name="plan_message">Plan message</string>
+    <string name="all_planned_messages">All planned messages</string>
     <!-- EOF -->
 
 </resources>
