@@ -8,11 +8,15 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import java.text.DateFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import ru.innopolis.messagino.DelayedMessageData;
 
@@ -28,6 +32,8 @@ public class DelayedMessageDatabase extends Database {
     private static final String TREAD_ID = "tread_id";
     public static final String STATUS = "status";
     static final String DROP_TABLE = "DROP TABLE " + TABLE_NAME + ";";
+    private Timer timer;
+    private SendDelayedMessages sdm;
 
     private static DateFormat dateFormat = DateFormat.getDateTimeInstance();
 
@@ -39,6 +45,10 @@ public class DelayedMessageDatabase extends Database {
 
     DelayedMessageDatabase(final Context context, final SQLiteOpenHelper databaseHelper) {
         super(context, databaseHelper);
+
+        sdm = new SendDelayedMessages(this);
+        timer = new Timer();
+        timer.schedule(sdm, 1000, 1000);
     }
 
 
@@ -120,4 +130,21 @@ public class DelayedMessageDatabase extends Database {
         getDb().update(TABLE_NAME, newValues, ID + " = ?", new String[]{"" + messageId });
     }
 
+}
+class SendDelayedMessages extends TimerTask {
+    DelayedMessageDatabase dmdb;
+
+    SendDelayedMessages(DelayedMessageDatabase p_dmdb){
+        dmdb = p_dmdb;
+    }
+
+    @Override
+    public void run() {
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(
+                "dd:MMMM:yyyy HH:mm:ss a", Locale.getDefault());
+        final String strDate = simpleDateFormat.format(calendar.getTime());
+
+        System.out.println(strDate);
+    }
 }

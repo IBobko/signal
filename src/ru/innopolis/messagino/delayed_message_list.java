@@ -21,6 +21,7 @@ import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Timer;
 
 public class delayed_message_list extends BaseActionBarActivity {
 
@@ -35,6 +36,7 @@ public class delayed_message_list extends BaseActionBarActivity {
     private long threadId;
     private int status = 0;
     private boolean archived;
+    private Timer mTimer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
