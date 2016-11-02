@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import java.text.DateFormat;
+import java.text.Format;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -60,6 +61,49 @@ public class DelayedMessageDatabase extends Database {
         final SQLiteDatabase database = databaseHelper.getReadableDatabase();
         final Cursor cursor = database.rawQuery("SELECT " + ID + ", " + TREAD_ID + "," + MESSAGE + "," + DT + "," + STATUS + " FROM " + TABLE_NAME, new String[]{});
         return getByCursor(cursor);
+    }
+
+    public List<DelayedMessageData> getCurrentDelayedMessages() {
+        final SQLiteDatabase database = databaseHelper.getReadableDatabase();
+        final String status = "0";
+        final Cursor cursor = database.rawQuery("SELECT "   + ID + ", "
+                                                            + TREAD_ID + ","
+                                                            + MESSAGE + ","
+                                                            + DT + ","
+                                                            + STATUS
+                                                + " FROM "  + TABLE_NAME
+                                                + " WHERE " + STATUS + "= ?"
+                , new String[]{""+status});
+
+
+
+        List<DelayedMessageData> allData = getByCursor(cursor);
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.SECOND,0);
+        cal.set(Calendar.MILLISECOND,0);
+
+        List<DelayedMessageData> result = new ArrayList<>();
+
+        for(DelayedMessageData d : allData){
+
+            d.getDateForSending().set(Calendar.SECOND,0);
+            d.getDateForSending().set(Calendar.MILLISECOND,0);
+
+            System.out.println(DateFormat.getDateTimeInstance().format(cal.getTime()));
+            System.out.println("Status" + d.getStatus());
+            System.out.println(DateFormat.getDateTimeInstance().format(d.getDateForSending().getTime()));
+
+            if (0 == d.getDateForSending().compareTo(cal)){
+                result.add(d);
+            }
+        }
+        return result;
+    }
+
+    public void updateDelayedMessagesAsPerformed(int messageId, int status) {
+        final ContentValues newValues = new ContentValues();
+        newValues.put(STATUS, status);
+        getDb().update(TABLE_NAME, newValues, ID + " = ?", new String[]{"" + messageId });
     }
 
     private DelayedMessageData delayedMessageDataFromCursor(final Cursor cursor) {
@@ -141,10 +185,19 @@ class SendDelayedMessages extends TimerTask {
     @Override
     public void run() {
         Calendar calendar = Calendar.getInstance();
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(
-                "dd:MMMM:yyyy HH:mm:ss a", Locale.getDefault());
-        final String strDate = simpleDateFormat.format(calendar.getTime());
+        System.out.println("First step");
+        List<DelayedMessageData> dm = dmdb.getCurrentDelayedMessages();
 
-        System.out.println(strDate);
+        if (dm.isEmpty()){
+            System.out.println("Empty");
+            return;
+        }
+        System.out.println("Next step");
+        for(DelayedMessageData d:dm){
+            System.out.println(DateFormat.getDateTimeInstance().format(d.getDateForSending().getTime()) + d.getText());
+            dmdb.updateDelayedMessagesAsPerformed(d.getId(), 1);
+            System.out.println("УРРРРРРРААААА! ОТПРАВИЛИ!!!");
+        }
+
     }
 }
