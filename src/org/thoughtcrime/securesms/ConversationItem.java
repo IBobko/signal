@@ -169,8 +169,7 @@ public class ConversationItem extends LinearLayout
     audioView.setDownloadClickListener(downloadClickListener);
     audioView.setOnLongClickListener(passthroughClickListener);
     bodyText.setOnLongClickListener(passthroughClickListener);
-    bodyText.setOnClickListener(passthroughClickListener);
-  }
+    bodyText.setOnClickListener(passthroughClickListener);  }
 
   @Override
   public void bind(@NonNull MasterSecret       masterSecret,
