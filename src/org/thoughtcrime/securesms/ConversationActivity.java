@@ -148,6 +148,7 @@ import java.security.SecureRandom;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+import ru.innopolis.messagino.Global;
 import ru.innopolis.messagino.delayed_message_list;
 import ws.com.google.android.mms.ContentType;
 
@@ -224,6 +225,9 @@ public class ConversationActivity extends PassphraseRequiredActionBarActivity
     @Override
     protected void onCreate(Bundle state, @NonNull MasterSecret masterSecret) {
         Log.w(TAG, "onCreate()");
+
+        Global.masterSecret = masterSecret;
+
         this.masterSecret = masterSecret;
 
         supportRequestWindowFeature(WindowCompat.FEATURE_ACTION_BAR_OVERLAY);
@@ -575,9 +579,9 @@ public class ConversationActivity extends PassphraseRequiredActionBarActivity
 
     private void showDelayedMessageList() {
         final Intent intent = new Intent(this, delayed_message_list.class);
-//        final ThreadDatabase threadDatabase = DatabaseFactory.getThreadDatabase(ConversationActivity.this);
-//        long threadId = threadDatabase.getThreadIdFor(recipients);
-//        intent.putExtra("threadId", threadId);
+        final ThreadDatabase threadDatabase = DatabaseFactory.getThreadDatabase(ConversationActivity.this);
+        long threadId = threadDatabase.getThreadIdFor(recipients);
+        intent.putExtra("threadId", threadId);
         startActivity(intent);
     }
 

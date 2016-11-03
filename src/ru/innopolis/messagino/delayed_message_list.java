@@ -44,6 +44,7 @@ public class delayed_message_list extends BaseActionBarActivity {
         //getActionBar().setDisplayHomeAsUpEnabled(true);
         archived = getIntent().getBooleanExtra(IS_ARCHIVED_EXTRA, false);
         delayed_message_list.this.setTitle(R.string.title_activity_delayed_messages);
+        Global.activity = this;
     }
 
     @Override
@@ -70,7 +71,7 @@ public class delayed_message_list extends BaseActionBarActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
+        final delayed_message_list that = this;
         setContentView(R.layout.activity_delayed_messages_list);
         listView = (ListView) findViewById(R.id.delayedMessagesList);
         listView.setLongClickable(true);
@@ -82,10 +83,10 @@ public class delayed_message_list extends BaseActionBarActivity {
 
         final Bundle extras = intent.getExtras();
         threadId = extras.getLong("threadId");
-        status = extras.getInt("status",0);
+        status = extras.getInt("status", 0);
 
         final DelayedMessageDatabase delayedMessage = DatabaseFactory.getDelayedMessageDatabase(delayed_message_list.this);
-        listOfMessages = delayedMessage.getByRecipientAndStatus(threadId,status);
+        listOfMessages = delayedMessage.getByRecipientAndStatus(threadId, status);
         for (final DelayedMessageData delayedMessageData : listOfMessages) {
             final HashMap<String, String> map = new HashMap<>();
             map.put("DateTime", DateFormat.getDateTimeInstance().format(delayedMessageData.getDateForSending().getTime()));
@@ -129,7 +130,7 @@ public class delayed_message_list extends BaseActionBarActivity {
                         myArrList.remove(pos);
                         adapter.notifyDataSetChanged();
                         final DelayedMessageDatabase delayedMessage = DatabaseFactory.getDelayedMessageDatabase(delayed_message_list.this);
-                        delayedMessage.updateStatus(id,1);
+                        delayedMessage.updateStatus(id, 1);
                         setVisibleStstus(false);
                         return true;
                     }
@@ -154,7 +155,7 @@ public class delayed_message_list extends BaseActionBarActivity {
         });
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        if (status == 0)fab.show();
+        if (status == 0) fab.show();
         else fab.hide();
 
 
@@ -169,7 +170,7 @@ public class delayed_message_list extends BaseActionBarActivity {
             }
         });
         // change title name
-        if(status==1) {
+        if (status == 1) {
             delayed_message_list.this.setTitle(R.string.title_activity_archive);
         }
     }

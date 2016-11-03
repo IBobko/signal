@@ -1,66 +1,35 @@
 {
   "project_info": {
-    "project_number": "27475640567",
-    "firebase_url": "https://messagino-4bd6f.firebaseio.com",
-    "project_id": "messagino-4bd6f",
-    "storage_bucket": "messagino-4bd6f.appspot.com"
+    "project_number": "227055718851",
+    "firebase_url": "https://signal-29683.firebaseio.com",
+    "project_id": "signal-29683",
+    "storage_bucket": "signal-29683.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:27475640567:android:aa7431605cfb1a74",
-        "android_client_info": {
-          "package_name": "ru.innopolis.messagino"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "27475640567-20f00bmi4ovl0j7ho303qpugnn97j7kd.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyDR1Yb6p66uUm1mCYg8NWrgTMqbraWt3tk"
-        }
-      ],
-      "services": {
-        "analytics_service": {
-          "status": 1
-        },
-        "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
-        },
-        "ads_service": {
-          "status": 2
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:27475640567:android:a9297b152879f266",
+        "mobilesdk_app_id": "1:227055718851:android:a9297b152879f266",
         "android_client_info": {
           "package_name": "org.thoughtcrime.securesms"
         }
       },
       "oauth_client": [
         {
-          "client_id": "27475640567-asj7nac1cceakj70mfesc0ueblmcvrn5.apps.googleusercontent.com",
+          "client_id": "227055718851-infknehoupd98uauito5hhq33u8fb8nk.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "org.thoughtcrime.securesms",
-            "certificate_hash": "81E4748FDA1985FB66CF45B98EA5ECBA861F31A4"
+            "certificate_hash": "0EF202B33ABF352E749254D3D8279C0723C0ABE5"
           }
         },
         {
-          "client_id": "27475640567-20f00bmi4ovl0j7ho303qpugnn97j7kd.apps.googleusercontent.com",
+          "client_id": "227055718851-gsee5sfb8snrh7qpke3rqlqfg0o4dbm8.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDR1Yb6p66uUm1mCYg8NWrgTMqbraWt3tk"
+          "current_key": "AIzaSyBAZ_1TroPHKZL6UpQoa1athp-uKBAHA1s"
         }
       ],
       "services": {
@@ -71,7 +40,7 @@
           "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "27475640567-20f00bmi4ovl0j7ho303qpugnn97j7kd.apps.googleusercontent.com",
+              "client_id": "227055718851-gsee5sfb8snrh7qpke3rqlqfg0o4dbm8.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

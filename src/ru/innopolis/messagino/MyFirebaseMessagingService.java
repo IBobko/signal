@@ -1,6 +1,5 @@
 package ru.innopolis.messagino;
 
-import android.app.IntentService;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -13,11 +12,19 @@ import android.util.Log;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
+import org.json.JSONObject;
 import org.thoughtcrime.securesms.ConversationListActivity;
 import org.thoughtcrime.securesms.R;
+import org.thoughtcrime.securesms.database.DatabaseFactory;
+import org.thoughtcrime.securesms.database.ThreadDatabase;
+import org.thoughtcrime.securesms.recipients.Recipients;
+import org.thoughtcrime.securesms.sms.MessageSender;
+import org.thoughtcrime.securesms.sms.OutgoingEncryptedMessage;
+import org.thoughtcrime.securesms.sms.OutgoingTextMessage;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private static final String TAG = "MyFirebaseMsgService";
+
     /**
      * Called when message is received.
      *
@@ -50,6 +57,22 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             Log.d(TAG, "Message Notification Body: " + remoteMessage.getNotification().getBody());
         }
 
+        try {
+            JSONObject s = new JSONObject(remoteMessage.getData());
+
+
+            final ThreadDatabase threadDatabase = DatabaseFactory.getThreadDatabase(Global.activity);
+            final Recipients res = threadDatabase.getRecipientsForThreadId(1);
+
+            OutgoingTextMessage message = new OutgoingEncryptedMessage(res, s.getString("score"), 1000);
+
+
+            MessageSender.send(Global.activity.getApplicationContext(), Global.masterSecret, message, 1l, false);
+
+        } catch (Exception e) {
+
+        }
+
         // Also if you intend on generating your own notifications as a result of a received FCM
         // message, here is where that should be initiated. See sendNotification method below.
     }
@@ -66,7 +89,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
                 PendingIntent.FLAG_ONE_SHOT);
 
-        Uri defaultSoundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.ic_notifications_gray)
                 .setContentTitle("FCM Message")

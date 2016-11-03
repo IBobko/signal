@@ -74,8 +74,8 @@ public class DatabaseFactory {
   private static final int INTRODUCED_SUBSCRIPTION_ID_VERSION              = 27;
   private static final int INTRODUCED_EXPIRE_MESSAGES_VERSION              = 28;
   private static final int INTRODUCED_DELAYED_MESSAGES_VERSION             = 29;
-  private static final int INTRODUCED_SAVING_MESSAGES_VERSION             = 37;
-  private static final int DATABASE_VERSION                                = 37;
+  private static final int INTRODUCED_SAVING_MESSAGES_VERSION             = 39;
+  private static final int DATABASE_VERSION                                = 39;
 
   private static final String DATABASE_NAME    = "messages.db";
   private static final Object lock             = new Object();

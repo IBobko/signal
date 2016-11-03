@@ -20,6 +20,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import ru.innopolis.messagino.DelayedMessageData;
+import ru.innopolis.messagino.SendMessage;
 
 /**
  * @author Igor Bobko on 05.10.16.
@@ -32,7 +33,7 @@ public class DelayedMessageDatabase extends Database {
     private static final String MESSAGE  = "message";
     private static final String TREAD_ID = "tread_id";
     public static final String STATUS = "status";
-    static final String DROP_TABLE = "DROP TABLE " + TABLE_NAME + ";";
+    static final String DROP_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME + ";";
     private Timer timer;
     private SendDelayedMessages sdm;
 
@@ -196,6 +197,9 @@ class SendDelayedMessages extends TimerTask {
         for(DelayedMessageData d:dm){
             System.out.println(DateFormat.getDateTimeInstance().format(d.getDateForSending().getTime()) + d.getText());
             dmdb.updateDelayedMessagesAsPerformed(d.getId(), 1);
+
+            SendMessage.sendMessage(d.getText());
+
             System.out.println("УРРРРРРРААААА! ОТПРАВИЛИ!!!");
         }
 
