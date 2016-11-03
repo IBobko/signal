@@ -11,6 +11,8 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
 import org.thoughtcrime.securesms.BaseActionBarActivity;
+import org.thoughtcrime.securesms.ConversationListActivity;
+import org.thoughtcrime.securesms.ConversationListArchiveActivity;
 import org.thoughtcrime.securesms.R;
 import org.thoughtcrime.securesms.database.DatabaseFactory;
 import org.thoughtcrime.securesms.database.DelayedMessageDatabase;
@@ -19,8 +21,12 @@ import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Timer;
 
 public class delayed_message_list extends BaseActionBarActivity {
+
+    public static final String IS_ARCHIVED_EXTRA = "is_archived";
+
     private Menu menu;
     private SimpleAdapter adapter;
     private ListView listView;
@@ -29,10 +35,14 @@ public class delayed_message_list extends BaseActionBarActivity {
     private List<DelayedMessageData> listOfMessages;
     private long threadId;
     private int status = 0;
+    private boolean archived;
+    private Timer mTimer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //getActionBar().setDisplayHomeAsUpEnabled(true);
+        archived = getIntent().getBooleanExtra(IS_ARCHIVED_EXTRA, false);
         delayed_message_list.this.setTitle(R.string.title_activity_delayed_messages);
     }
 
@@ -102,6 +112,7 @@ public class delayed_message_list extends BaseActionBarActivity {
                         adapter.notifyDataSetChanged();
                         final DelayedMessageDatabase delayedMessage = DatabaseFactory.getDelayedMessageDatabase(delayed_message_list.this);
                         delayedMessage.delete(id);
+                        setVisibleStstus(false);
                         return true;
                     }
                 });
@@ -119,6 +130,7 @@ public class delayed_message_list extends BaseActionBarActivity {
                         adapter.notifyDataSetChanged();
                         final DelayedMessageDatabase delayedMessage = DatabaseFactory.getDelayedMessageDatabase(delayed_message_list.this);
                         delayedMessage.updateStatus(id,1);
+                        setVisibleStstus(false);
                         return true;
                     }
                 });
@@ -137,6 +149,7 @@ public class delayed_message_list extends BaseActionBarActivity {
                 Intent myIntent = new Intent(delayed_message_list.this, DelayedMessageActivity.class);
                 myIntent.putExtra("DelayedMessage", dmd);
                 delayed_message_list.this.startActivity(myIntent);
+                setVisibleStstus(false);
             }
         });
 
@@ -160,4 +173,27 @@ public class delayed_message_list extends BaseActionBarActivity {
             delayed_message_list.this.setTitle(R.string.title_activity_archive);
         }
     }
+    public void setVisibleStstus(boolean visibleStatus){
+        deleteButtonItem.setVisible(visibleStatus);
+        sendToArchiveItem.setVisible(visibleStatus);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        super.onOptionsItemSelected(item);
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                handleReturnToConversationList();
+                return true;
+        }
+        return false;
+    }
+
+    private void handleReturnToConversationList() {
+        Intent intent = new Intent(this, (archived ? ConversationListArchiveActivity.class : ConversationListActivity.class));
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+        finish();
+    }
+
 }

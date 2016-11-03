@@ -16,6 +16,7 @@
  */
 package org.thoughtcrime.securesms;
 
+import android.app.PendingIntent;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -36,6 +37,8 @@ import android.os.Vibrator;
 import android.provider.Browser;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.view.WindowCompat;
 import android.support.v7.app.AlertDialog;
 import android.text.Editable;
@@ -572,9 +575,9 @@ public class ConversationActivity extends PassphraseRequiredActionBarActivity
 
     private void showDelayedMessageList() {
         final Intent intent = new Intent(this, delayed_message_list.class);
-        final ThreadDatabase threadDatabase = DatabaseFactory.getThreadDatabase(ConversationActivity.this);
-        long threadId = threadDatabase.getThreadIdFor(recipients);
-        intent.putExtra("threadId", threadId);
+//        final ThreadDatabase threadDatabase = DatabaseFactory.getThreadDatabase(ConversationActivity.this);
+//        long threadId = threadDatabase.getThreadIdFor(recipients);
+//        intent.putExtra("threadId", threadId);
         startActivity(intent);
     }
 
